@@ -12,8 +12,7 @@ public static class Day1
     public static void SolutionPart2()
     {
         List<int> totals = GetTotals();
-        totals.Sort();
-        totals.Reverse();
+        totals.OrderByDescending(i => i);
         int result = totals[0] + totals[1] + totals[2];
         Console.WriteLine($"Sum of highest 3: {result}");
     }
