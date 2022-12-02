@@ -1,4 +1,64 @@
-﻿Day1.SolutionPart2();
+﻿Day2.SolutionPart2();
+
+public static class Day2
+{
+    public static void SolutionPart1()
+    {
+        int[] scores = File.ReadLines("Data/day2.txt")
+                           .Select(x => ScoreRoundPart1(x.Trim()))
+                           .ToArray();
+        Console.WriteLine($"Total: {scores.Sum()}");
+    }
+
+    public static void SolutionPart2()
+    {
+        int[] scores = File.ReadLines("Data/day2.txt")
+                           .Select(x => ScoreRoundPart2(x.Trim()))
+                           .ToArray();
+        Console.WriteLine($"Total: {scores.Sum()}");
+    }
+
+    public static int ScoreRoundPart1(string played)
+    {
+        // A = Rock B = Paper C = Scissors
+        // X = Rock Y = Paper Z = Scissors
+        // X = 1    Y = 2     Z = 3
+        // Win = 6  Draw = 3  Loss = 0  
+        return played switch
+        {
+            "A X" => 1 + 3,
+            "A Y" => 2 + 6,
+            "A Z" => 3 + 0,
+            "B X" => 1 + 0,
+            "B Y" => 2 + 3,
+            "B Z" => 3 + 6,
+            "C X" => 1 + 6,
+            "C Y" => 2 + 0,
+            "C Z" => 3 + 3,
+            _ => throw new ArgumentOutOfRangeException($"{played}!?")
+        };
+    }
+
+    public static int ScoreRoundPart2(string played)
+    {
+        // A = Rock B = Paper C = Scissors
+        // X = lose Y = draw  Z = win
+        // Win = 6  Draw = 3  Loss = 0   
+        return played switch
+        {
+            "A X" => 3 + 0, // Rock lose with scissors
+            "A Y" => 1 + 3, // Rock draw with rock
+            "A Z" => 2 + 6, // Rock win with paper
+            "B X" => 1 + 0, // Paper lose with rock
+            "B Y" => 2 + 3, // Paper draw with paper
+            "B Z" => 3 + 6, // Paper win with scissors
+            "C X" => 2 + 0, // Scissors lose with paper
+            "C Y" => 3 + 3, // Scissors draw with scissors
+            "C Z" => 1 + 6, // Scissors win with rock
+            _ => throw new ArgumentOutOfRangeException($"{played}!?")
+        };
+    }
+}
 
 public static class Day1
 {
