@@ -4,21 +4,19 @@ public static class Day2
 {
     public static void SolutionPart1()
     {
-        int[] scores = File.ReadLines("Data/day2.txt")
-                           .Select(x => ScoreRoundPart1(x.Trim()))
-                           .ToArray();
+        var scores = File.ReadLines("Data/day2.txt")
+                         .Select(x => ScorePart1(x.Trim()));
         Console.WriteLine($"Total: {scores.Sum()}");
     }
 
     public static void SolutionPart2()
     {
-        int[] scores = File.ReadLines("Data/day2.txt")
-                           .Select(x => ScoreRoundPart2(x.Trim()))
-                           .ToArray();
+        var scores = File.ReadLines("Data/day2.txt")
+                         .Select(x => ScorePart2(x.Trim()));
         Console.WriteLine($"Total: {scores.Sum()}");
     }
 
-    public static int ScoreRoundPart1(string played)
+    public static int ScorePart1(string played)
     {
         // A = Rock B = Paper C = Scissors
         // X = Rock Y = Paper Z = Scissors
@@ -39,7 +37,7 @@ public static class Day2
         };
     }
 
-    public static int ScoreRoundPart2(string played)
+    public static int ScorePart2(string played)
     {
         // A = Rock B = Paper C = Scissors
         // X = lose Y = draw  Z = win
