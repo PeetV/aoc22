@@ -1,4 +1,76 @@
-﻿Day2.SolutionPart2();
+﻿using System.Linq;
+
+Day3.SolutionPart2();
+
+public static class Day3
+{
+
+    public static void SolutionPart1()
+    {
+        var s = new Scorer();
+        var scores = File.ReadLines("Data/day3.txt")
+                         .Select(x => ProcessSackPart1(x.Trim(), s));
+        Console.WriteLine($"Total: {scores.Sum()}");
+    }
+
+    public static void SolutionPart2()
+    {
+        var s = new Scorer();
+        var lines = File.ReadLines("Data/day3.txt");
+        int total = 0;
+        List<string> group = new();
+        foreach (var line in lines)
+        {
+            group.Add(line);
+            if (group.Count == 3)
+            {
+                total += ProcessGroupPart2(group, s);
+                group = new();
+            }
+        }
+        Console.WriteLine(total);
+    }
+
+    public static int ProcessSackPart1(string content, Scorer s)
+    {
+        if (content.Length % 2 != 0)
+            throw new ArgumentException("Rucksack content must be even");
+        int splitPoint = content.Length / 2;
+        string left = content.Substring(0, splitPoint);
+        string right = content.Substring(splitPoint, splitPoint);
+        var inBoth = left.ToCharArray().Intersect(right.ToCharArray());
+        return s.score(inBoth.ToArray()[0]);
+    }
+
+    public static int ProcessGroupPart2(List<string> group, Scorer s)
+    {
+        var firstTwo = group[0].ToCharArray().Intersect(group[1].ToCharArray());
+        var inThree = firstTwo.Intersect(group[2].ToCharArray()).ToArray();
+        return s.score(inThree[0]);
+    }
+
+    public class Scorer
+    {
+        private List<char> lower;
+        private List<char> upper;
+
+        public Scorer()
+        {
+            lower = "abcdefghijklmnopqrstuvwxyz".ToCharArray().ToList();
+            upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray().ToList();
+        }
+
+        public int score(char c)
+        {
+            if (lower.Contains(c))
+                return lower.IndexOf(c) + 1;
+            if (upper.Contains(c))
+                return upper.IndexOf(c) + 1 + 26;
+            return 0;
+        }
+    }
+
+}
 
 public static class Day2
 {
