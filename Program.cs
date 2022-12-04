@@ -1,6 +1,47 @@
 ﻿using System.Linq;
 
-Day3.SolutionPart2();
+Day4.SolutionPart2();
+
+public static class Day4
+{
+
+    public static void SolutionPart1()
+    {
+        var scores = File.ReadLines("Data/day4.txt")
+                         .Select(x => ProcessRowPart1(x.Trim()));
+        Console.WriteLine($"Total: {scores.Sum()}");
+    }
+
+    public static void SolutionPart2()
+    {
+        var scores = File.ReadLines("Data/day4.txt")
+                         .Select(x => ProcessRowPart2(x.Trim()));
+        Console.WriteLine($"Total: {scores.Sum()}");
+    }
+
+    public static int ProcessRowPart1(string row)
+    {
+        string[] splits = row.Split(",").ToArray();
+        int[] left = splits[0].Split("-").Select(x => Convert.ToInt32(x)).ToArray();
+        int[] right = splits[1].Split("-").Select(x => Convert.ToInt32(x)).ToArray();
+        if (left[0] >= right[0] & left[1] <= right[1]) return 1;
+        if (right[0] >= left[0] & right[1] <= left[1]) return 1;
+        return 0;
+    }
+
+    public static int ProcessRowPart2(string row)
+    {
+        string[] splits = row.Split(",").ToArray();
+        int[] left = splits[0].Split("-").Select(x => Convert.ToInt32(x)).ToArray();
+        int[] right = splits[1].Split("-").Select(x => Convert.ToInt32(x)).ToArray();
+        if (left[0] >= right[0] & left[0] <= right[1]) return 1;
+        if (left[1] >= right[0] & left[1] <= right[1]) return 1;
+        if (right[0] >= left[0] & right[0] <= left[1]) return 1;
+        if (right[1] >= left[0] & right[1] <= left[1]) return 1;
+        return 0;
+    }
+
+}
 
 public static class Day3
 {
