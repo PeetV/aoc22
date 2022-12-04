@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 
+Console.WriteLine("Advent of Code 2022: Day 4 - Part 2");
 Day4.SolutionPart2();
 
 public static class Day4
