@@ -1,22 +1,38 @@
 ﻿using System.Linq;
 
-Console.WriteLine("Advent of Code 2022: Day 5 - Part 1");
-Day5.SolutionPart1();
+Day5.Solution();
 
 public static class Day5
 {
 
-    public static void SolutionPart1()
+    public static void Solution()
     {
-        string[] data = ReadData();
-        Stack<char>[] stacks = GetStacks(data);
-        (int, int, int)[] instructions = GetInstructions(data);
-        Console.WriteLine(string.Join(",", instructions[0..10]));
+        Console.WriteLine("Advent of Code 2022 Day 5");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Day5.ProcessData()}");
+        Console.WriteLine($"Part 2: {Day5.ProcessData(reverseBuffer: true)}");
     }
 
-    public static string[] ReadData()
+    public static string ProcessData(bool reverseBuffer = false)
     {
-        return File.ReadLines("Data/day5.txt").Select(x => x.Trim()).ToArray();
+        string[] data = File.ReadLines("Data/day5.txt")
+                            .Select(x => x.Trim())
+                            .ToArray();
+        Stack<char>[] stacks = GetStacks(data);
+        (int, int, int)[] instructions = GetInstructions(data);
+        List<char> buffer = new();
+        foreach (var i in instructions)
+        {
+            buffer = Enumerable.Range(0, i.Item1)
+                               .Select(x => stacks[i.Item2 - 1].Pop())
+                               .ToList();
+            if (reverseBuffer) buffer.Reverse();
+            foreach (char c in buffer) stacks[i.Item3 - 1].Push(c);
+        }
+        char[] result = Enumerable.Range(0, stacks.Length)
+                                  .Select(x => stacks[x].Pop())
+                                  .ToArray();
+        return string.Join("", result);
     }
 
     public static Stack<char>[] GetStacks(string[] data)
