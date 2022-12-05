@@ -1,7 +1,62 @@
 ﻿using System.Linq;
 
-Console.WriteLine("Advent of Code 2022: Day 4 - Part 2");
-Day4.SolutionPart2();
+Console.WriteLine("Advent of Code 2022: Day 5 - Part 1");
+Day5.SolutionPart1();
+
+public static class Day5
+{
+
+    public static void SolutionPart1()
+    {
+        string[] data = ReadData();
+        Stack<char>[] stacks = GetStacks(data);
+        (int, int, int)[] instructions = GetInstructions(data);
+        Console.WriteLine(string.Join(",", instructions[0..10]));
+    }
+
+    public static string[] ReadData()
+    {
+        return File.ReadLines("Data/day5.txt").Select(x => x.Trim()).ToArray();
+    }
+
+    public static Stack<char>[] GetStacks(string[] data)
+    {
+        Stack<char>[] stacks = Enumerable.Range(0, 9)
+                                         .Select(_ => new Stack<char>())
+                                         .ToArray();
+        int stackIdx = 0;
+        char stack;
+        for (int col = 1; col < 34; col += 4)
+        {
+            for (int row = 7; row >= 0; row--)
+            {
+                stack = data[row][col];
+                if (stack != ' ')
+                    stacks[stackIdx].Push(stack);
+            }
+            stackIdx++;
+        }
+        return stacks;
+    }
+
+    public static (int, int, int)[] GetInstructions(string[] data)
+    {
+        List<(int, int, int)> instructions = new();
+        string[] split1, split2;
+        int move, from, to;
+        foreach (string line in data[10..data.Length])
+        {
+            split1 = line.Split(" from ");
+            split2 = split1[1].Split(" to ");
+            move = Convert.ToInt32(split1[0].Substring(5));
+            from = Convert.ToInt32(split2[0]);
+            to = Convert.ToInt32(split2[1]);
+            instructions.Add((move, from, to));
+        }
+        return instructions.ToArray();
+    }
+
+}
 
 public static class Day4
 {
