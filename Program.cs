@@ -9,22 +9,21 @@ public static class Day6
     {
         Console.WriteLine("Advent of Code 2022 Day 6");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
-        Console.WriteLine($"Part 1: {}");
-        Console.WriteLine($"Part 2: {}");
+        Console.WriteLine($"Part 1: {ProcessStream(offset: 4)}");
+        Console.WriteLine($"Part 2: {ProcessStream(offset: 14)}");
     }
 
-    public static int ProcessData()
+    public static int ProcessStream(int offset)
     {
-        //string[] data = File.ReadLines("Data/day6.txt")
-        //                    .Select(x => x.Trim())
-        //                    .ToArray();
-        stirng[] data = new string[] {"mjqjpqmgbljsphdztnvjfqwrcgsmlb"};
+        string[] data = File.ReadLines("Data/day6.txt")
+                           .Select(x => x.Trim())
+                           .ToArray();
         string buffer = "";
         for (int idx = 0; idx < data[0].Length; idx++)
         {
-            buffer = data[0].Substring(idx, 4);
-            if (bubber.Distinct().Length = 4)
-                return idx + 4; 
+            buffer = data[0].Substring(idx, offset);
+            if (buffer.Distinct().Count() == offset)
+                return idx + offset;
         }
         return 0;
     }
