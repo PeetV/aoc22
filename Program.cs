@@ -1,6 +1,35 @@
 ﻿using System.Linq;
 
-Day5.Solution();
+Day6.Solution();
+
+public static class Day6
+{
+
+    public static void Solution()
+    {
+        Console.WriteLine("Advent of Code 2022 Day 6");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {}");
+        Console.WriteLine($"Part 2: {}");
+    }
+
+    public static int ProcessData()
+    {
+        //string[] data = File.ReadLines("Data/day6.txt")
+        //                    .Select(x => x.Trim())
+        //                    .ToArray();
+        stirng[] data = new string[] {"mjqjpqmgbljsphdztnvjfqwrcgsmlb"};
+        string buffer = "";
+        for (int idx = 0; idx < data[0].Length; idx++)
+        {
+            buffer = data[0].Substring(idx, 4);
+            if (bubber.Distinct().Length = 4)
+                return idx + 4; 
+        }
+        return 0;
+    }
+
+}
 
 public static class Day5
 {
