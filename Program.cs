@@ -23,12 +23,11 @@ public static class Day7
     {
         Dictionary<string, int> dirs = ProcessDirectories();
         int spaceNeeded = 30000000 - (70000000 - dirs.Values.Max());
-        (string, int)[] pairs = dirs.Keys
-                                    .Zip(dirs.Values)
-                                    .Where(p => p.Item2 >= spaceNeeded)
-                                    .OrderBy(p => p.Item2)
-                                    .ToArray();
-        return pairs[0].Item2;
+        int[] vals = dirs.Values
+                         .Where(x => x >= spaceNeeded)
+                         .OrderBy(x => x)
+                         .ToArray();
+        return vals[0];
     }
 
     public static Dictionary<string, int> ProcessDirectories()
@@ -37,31 +36,14 @@ public static class Day7
                             .Select(x => x.Trim())
                             .ToArray();
         Dictionary<string, int> dirs = new();
-        List<string> currentPath = new(), tmp;
+        List<string> currentPath = new();
         List<string> buffer = new();
         string substr, key;
-        string[] splits;
-        int fileSize;
         foreach (string line in data)
         {
             if (line.StartsWith("dir")) continue;
             if (line.StartsWith("$") & buffer.Count != 0)
-            {
-                // Clear the buffer
-                foreach (string buffline in buffer)
-                {
-                    splits = buffline.Split();
-                    fileSize = Convert.ToInt32(splits[0]);
-                    tmp = new List<string>(currentPath);
-                    while (tmp.Count > 0)
-                    {
-                        key = string.Join("-", tmp);
-                        dirs[key] += fileSize;
-                        if (tmp.Count > 0) tmp.RemoveAt(tmp.Count - 1);
-                    }
-                }
-                buffer.Clear();
-            }
+                ProcessBuffer(buffer, dirs, currentPath);
             if (line == "$ cd ..")
             {
                 currentPath.RemoveAt(currentPath.Count - 1);
@@ -78,9 +60,22 @@ public static class Day7
             if (line.StartsWith("$ ls")) continue;
             buffer.Add(line);
         }
-        // Clear the buffer. This is not DRY
+        ProcessBuffer(buffer, dirs, currentPath);
+        return dirs;
+    }
+
+    private static void ProcessBuffer(
+        List<string> buffer,
+        Dictionary<string, int> dirs,
+        List<string> currentPath
+    )
+    {
         if (buffer.Count != 0)
         {
+            string[] splits;
+            int fileSize;
+            List<string> tmp = new();
+            string key;
             foreach (string buffline in buffer)
             {
                 splits = buffline.Split();
@@ -95,7 +90,6 @@ public static class Day7
             }
             buffer.Clear();
         }
-        return dirs;
     }
 
 }
