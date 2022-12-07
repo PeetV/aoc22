@@ -1,6 +1,104 @@
 ﻿using System.Linq;
 
-Day6.Solution();
+Day7.Solution();
+
+public static class Day7
+{
+    public static void Solution()
+    {
+
+        Console.WriteLine("Advent of Code 2022 Day 7");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Part1()}");
+        Console.WriteLine($"Part 2: {Part2()}");
+    }
+
+    public static int Part1()
+    {
+        Dictionary<string, int> dirs = ProcessDirectories();
+        return dirs.Values.Where(x => x <= 100000).Sum();
+    }
+
+    public static int Part2()
+    {
+        Dictionary<string, int> dirs = ProcessDirectories();
+        int spaceNeeded = 30000000 - (70000000 - dirs.Values.Max());
+        (string, int)[] pairs = dirs.Keys
+                                    .Zip(dirs.Values)
+                                    .Where(p => p.Item2 >= spaceNeeded)
+                                    .OrderBy(p => p.Item2)
+                                    .ToArray();
+        return pairs[0].Item2;
+    }
+
+    public static Dictionary<string, int> ProcessDirectories()
+    {
+        string[] data = File.ReadLines("Data/day7.txt")
+                            .Select(x => x.Trim())
+                            .ToArray();
+        Dictionary<string, int> dirs = new();
+        List<string> currentPath = new(), tmp;
+        List<string> buffer = new();
+        string substr, key;
+        string[] splits;
+        int fileSize;
+        foreach (string line in data)
+        {
+            if (line.StartsWith("dir")) continue;
+            if (line.StartsWith("$") & buffer.Count != 0)
+            {
+                // Clear the buffer
+                foreach (string buffline in buffer)
+                {
+                    splits = buffline.Split();
+                    fileSize = Convert.ToInt32(splits[0]);
+                    tmp = new List<string>(currentPath);
+                    while (tmp.Count > 0)
+                    {
+                        key = string.Join("-", tmp);
+                        dirs[key] += fileSize;
+                        if (tmp.Count > 0) tmp.RemoveAt(tmp.Count - 1);
+                    }
+                }
+                buffer.Clear();
+            }
+            if (line == "$ cd ..")
+            {
+                currentPath.RemoveAt(currentPath.Count - 1);
+                continue;
+            }
+            if (line.StartsWith("$ cd"))
+            {
+                substr = line.Substring(5);
+                currentPath.Add(substr);
+                key = string.Join("-", currentPath);
+                if (!dirs.ContainsKey(key)) dirs[key] = 0;
+                continue;
+            }
+            if (line.StartsWith("$ ls")) continue;
+            buffer.Add(line);
+        }
+        // Clear the buffer. This is not DRY
+        if (buffer.Count != 0)
+        {
+            foreach (string buffline in buffer)
+            {
+                splits = buffline.Split();
+                fileSize = Convert.ToInt32(splits[0]);
+                tmp = new List<string>(currentPath);
+                while (tmp.Count > 0)
+                {
+                    key = string.Join("-", tmp);
+                    dirs[key] += fileSize;
+                    if (tmp.Count > 0) tmp.RemoveAt(tmp.Count - 1);
+                }
+            }
+            buffer.Clear();
+        }
+        return dirs;
+    }
+
+}
 
 public static class Day6
 {
