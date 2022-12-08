@@ -1,6 +1,49 @@
 ﻿using System.Linq;
 
-Day7.Solution();
+Day8.Solution();
+
+public static class Day8
+{
+    public static void Solution()
+    {
+
+        Console.WriteLine("Advent of Code 2022 Day 7");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Part1()}");
+        // Console.WriteLine($"Part 2: {Part2()}");
+    }
+
+    public static int Part1()
+    {
+        string[] data = File.ReadLines("Data/day8.txt")
+                                    .Select(x => x.Trim())
+                                    .ToArray();
+        int total = CountPerimeter(data);
+        for (int row = 1; row < data[0].Count() - 1; row++)
+            for (int col = 1; col < data.Count() - 1; col++)
+                total += PointVisible(data, row, col);
+        return total;
+    }
+
+    public static int CountPerimeter(string[] data)
+    {
+        return (data.Count() * 2) + (data[0].Count() * 2) - 4;
+    }
+
+    public static int PointVisible(string[] data, int row, int col)
+    {
+        // int[] up = Enumerable.Range(0, row)
+        //                      .Select(x => Convert.ToInt32(data[x][col] - '0'))
+        //                      .ToArray();
+        int[] down = Enumerable.Range(row, data.Count())
+                               .Select(x => Convert.ToInt32(data[x][col] - '0'))
+                               .ToArray();
+        // int[] left = Enumerable.Range(0, col - 1).Select(x => data[row][x]).ToArray();
+        // int[] right = Enumerable.Range(col + 1, data[0].Count()).Select(x => data[row][x]).ToArray();
+        Console.WriteLine($"{data[row][col]} {row}-{col} Down: {string.Join(",", down)}");
+        return 0;
+    }
+}
 
 public static class Day7
 {
