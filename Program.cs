@@ -73,25 +73,42 @@ public static class Day8
     public static int TreesVisible(string[] data, int row, int col)
     {
         // looking up
-        int upCount = 0;
-        if (row == 1) upCount = 1;
+        // int upCount = 0;
+        // if (row == 1) upCount = 1;
+        // else
+        // {
+        //     int treeN1, treeN2;
+        //     for (int r = row; r > 0; r--)
+        //     {
+        //         treeN1 = Convert.ToInt32(data[r][col] - '0');
+        //         treeN2 = Convert.ToInt32(data[r - 1][col] - '0');
+        //         if (treeN1 <= treeN2)
+        //         {
+        //             upCount += 1;
+        //             break;
+        //         }
+        //         upCount += 1;
+        //     }
+        // }
+        // looking down
+        int downCount = 0;
+        if (row == data.Count() - 1) downCount = 1;
         else
         {
             int treeN1, treeN2;
-            for (int r = row - 1; r >= 1; r--)
+            for (int r = row; r < data.Count(); r++)
             {
                 treeN1 = Convert.ToInt32(data[r][col] - '0');
-                treeN2 = Convert.ToInt32(data[r - 1][col] - '0');
-                Console.WriteLine($"r:{r} r-1:{r -1}");
-                if (treeN1 >= treeN2)
+                treeN2 = Convert.ToInt32(data[r + 1][col] - '0');
+                if (treeN1 <= treeN2)
                 {
-                    upCount += 1;
+                    downCount += 1;
                     break;
                 }
-                upCount += 1;
+                downCount += 1;
             }
         }
-        Console.WriteLine($"{row}-{col} up count {upCount}");
+        Console.WriteLine($"{row}-{col} down count {downCount}");
         return 0;
     }
 
