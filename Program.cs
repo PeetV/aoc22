@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 
 Day8.Solution();
 
@@ -79,13 +79,30 @@ public static class Day8
                               .ToArray();
         int upCount = CountVisible(ups);
         Console.WriteLine(string.Join(",", ups));
+				// looking down
+        int[] downs = Enumerable.Range(row + 1, Data.Counts() - row - 1);
+                                .Select(x => Convert.ToInt32(data[x][col] - '0'))
+                                .ToArray();
+        int downCount = CountVisible(downs);
+				// looking left
+				int[] lefts = Enumerable.Range(0, col - 1);
+                                .Select(x => Convert.ToInt32(data[row][x] - '0'))
+																.Reverse()
+                                .ToArray();
+				int leftCount = CountVisible(lefts);
+				// looking right
+				int[] rights = Enumerable.Range(col + 1, data[0].Counts() - col - 1);
+                                 .Select(x => Convert.ToInt32(data[row][x] - '0'))
+                                 .ToArray();
+				int rightCount = CountVisible(rights);
+        Console.WriteLine(string.Join(",", ups));
         // Console.WriteLine($"{row}-{col} up count {upCount}");
         return 0;
     }
 
     private static int CountVisible(int[] heights)
     {
-
+				return 0;
     }
 
 }
