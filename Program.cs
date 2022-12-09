@@ -32,15 +32,28 @@ public static class Day8
 
     public static int PointVisible(string[] data, int row, int col)
     {
-        // int[] up = Enumerable.Range(0, row)
-        //                      .Select(x => Convert.ToInt32(data[x][col] - '0'))
-        //                      .ToArray();
-        int[] down = Enumerable.Range(row, data.Count())
-                               .Select(x => Convert.ToInt32(data[x][col] - '0'))
+        bool visible;
+        int pointVal = Convert.ToInt32(data[row][col] - '0');
+        int[] above = Enumerable.Range(0, row)
+                                .Select(x => Convert.ToInt32(data[x][col] - '0'))
+                                .ToArray();
+        visible = above.All(x => x < pointVal);
+        if (visible) return 1;
+        int[] below = Enumerable.Range(row + 1, data.Count() - row - 1)
+                                .Select(x => Convert.ToInt32(data[x][col] - '0'))
+                                .ToArray();
+        visible = below.All(x => x < pointVal);
+        if (visible) return 1;
+        int[] right = Enumerable.Range(col + 1, data[0].Count() - col - 1)
+                               .Select(x => Convert.ToInt32(data[row][x] - '0'))
                                .ToArray();
-        // int[] left = Enumerable.Range(0, col - 1).Select(x => data[row][x]).ToArray();
-        // int[] right = Enumerable.Range(col + 1, data[0].Count()).Select(x => data[row][x]).ToArray();
-        Console.WriteLine($"{data[row][col]} {row}-{col} Down: {string.Join(",", down)}");
+        visible = right.All(x => x < pointVal);
+        if (visible) return 1;
+        int[] left = Enumerable.Range(0, col)
+                               .Select(x => Convert.ToInt32(data[row][x] - '0'))
+                               .ToArray();
+        visible = left.All(x => x < pointVal);
+        if (visible) return 1;
         return 0;
     }
 }
