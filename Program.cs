@@ -4,25 +4,38 @@ Day8.Solution();
 
 public static class Day8
 {
+
     public static void Solution()
     {
 
-        Console.WriteLine("Advent of Code 2022 Day 7");
+        Console.WriteLine("Advent of Code 2022 Day 8");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine($"Part 1: {Part1()}");
-        // Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine($"Part 2: {Part2()}");
     }
 
     public static int Part1()
     {
         string[] data = File.ReadLines("Data/day8.txt")
-                                    .Select(x => x.Trim())
-                                    .ToArray();
+                            .Select(x => x.Trim())
+                            .ToArray();
         int total = CountPerimeter(data);
         for (int row = 1; row < data[0].Count() - 1; row++)
             for (int col = 1; col < data.Count() - 1; col++)
                 total += PointVisible(data, row, col);
         return total;
+    }
+
+    public static int Part2()
+    {
+        string[] data = File.ReadLines("Data/day8.txt")
+                            .Select(x => x.Trim())
+                            .ToArray();
+        List<int> scores = new();
+        for (int row = 1; row < data[0].Count() - 1; row++)
+            for (int col = 1; col < data.Count() - 1; col++)
+                scores.Add(TreesVisible(data, row, col));
+        return scores.Max();
     }
 
     public static int CountPerimeter(string[] data)
@@ -56,6 +69,32 @@ public static class Day8
         if (visible) return 1;
         return 0;
     }
+
+    public static int TreesVisible(string[] data, int row, int col)
+    {
+        // looking up
+        int upCount = 0;
+        if (row == 1) upCount = 1;
+        else
+        {
+            int treeN1, treeN2;
+            for (int r = row - 1; r >= 1; r--)
+            {
+                treeN1 = Convert.ToInt32(data[r][col] - '0');
+                treeN2 = Convert.ToInt32(data[r - 1][col] - '0');
+                Console.WriteLine($"r:{r} r-1:{r -1}");
+                if (treeN1 >= treeN2)
+                {
+                    upCount += 1;
+                    break;
+                }
+                upCount += 1;
+            }
+        }
+        Console.WriteLine($"{row}-{col} up count {upCount}");
+        return 0;
+    }
+
 }
 
 public static class Day7
