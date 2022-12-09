@@ -73,43 +73,19 @@ public static class Day8
     public static int TreesVisible(string[] data, int row, int col)
     {
         // looking up
-        // int upCount = 0;
-        // if (row == 1) upCount = 1;
-        // else
-        // {
-        //     int treeN1, treeN2;
-        //     for (int r = row; r > 0; r--)
-        //     {
-        //         treeN1 = Convert.ToInt32(data[r][col] - '0');
-        //         treeN2 = Convert.ToInt32(data[r - 1][col] - '0');
-        //         if (treeN1 <= treeN2)
-        //         {
-        //             upCount += 1;
-        //             break;
-        //         }
-        //         upCount += 1;
-        //     }
-        // }
-        // looking down
-        int downCount = 0;
-        if (row == data.Count() - 1) downCount = 1;
-        else
-        {
-            int treeN1, treeN2;
-            for (int r = row; r < data.Count(); r++)
-            {
-                treeN1 = Convert.ToInt32(data[r][col] - '0');
-                treeN2 = Convert.ToInt32(data[r + 1][col] - '0');
-                if (treeN1 <= treeN2)
-                {
-                    downCount += 1;
-                    break;
-                }
-                downCount += 1;
-            }
-        }
-        Console.WriteLine($"{row}-{col} down count {downCount}");
+        int[] ups = Enumerable.Range(0, row)
+                              .Select(x => Convert.ToInt32(data[x][col] - '0'))
+                              .Reverse()
+                              .ToArray();
+        int upCount = CountVisible(ups);
+        Console.WriteLine(string.Join(",", ups));
+        // Console.WriteLine($"{row}-{col} up count {upCount}");
         return 0;
+    }
+
+    private static int CountVisible(int[] heights)
+    {
+
     }
 
 }
