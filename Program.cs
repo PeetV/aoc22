@@ -25,40 +25,49 @@ public static class Day9
             {
                 switch (dir)
                 {
-                    case "R": hx += 1; break;
-                    case "L": hx -= 1; break;
-                    case "U": hy -= 1; break;
-                    case "D": hy += 1; break;
+                    case "R":
+                        hx++;
+                        if (Math.Abs(hx - tx) > 1)
+                        {
+                            tx = hx - 1;
+                            ty = hy;
+                            Increment(visited, $"{tx}-{ty}");
+                        }
+                        break;
+                    case "L":
+                        hx--;
+                        if (Math.Abs(hx - tx) > 1)
+                        {
+                            tx = hx + 1;
+                            ty = hy;
+                            Increment(visited, $"{tx}-{ty}");
+                        }
+                        break;
+                    case "U":
+                        hy++;
+                        if (Math.Abs(hy - ty) > 1)
+                        {
+                            ty = hy - 1;
+                            tx = hx;
+                            Increment(visited, $"{tx}-{ty}");
+                        }
+                        break;
+                    case "D":
+                        hy--;
+                        if (Math.Abs(hy - ty) > 1)
+                        {
+                            ty = hy - 1;
+                            tx = hx;
+                            Increment(visited, $"{tx}-{ty}");
+                        }
+                        break;
+                    default:
+                        throw new ArgumentException("Unknown direction");
                 };
-                if (hx == tx & hy == ty) continue;
-                // moved right
-                if ((hx - tx) > 1 & hy == ty)
-                {
-                    tx++;
-                    Increment(visited, $"{tx}-{ty}");
-                }
-                // moved left
-                if ((tx - hx) > 1 & hy == ty)
-                {
-                    tx--;
-                    Increment(visited, $"{tx}-{ty}");
-                }
-                // moved up
-                if ((ty - hy) > 1 & hx == tx)
-                {
-                    ty--;
-                    Increment(visited, $"{tx}-{ty}");
-                }
-                // moved down
-                if ((hy - ty) > 1 & hx == tx)
-                {
-                    ty++;
-                    Increment(visited, $"{tx}-{ty}");
-                }
-
             }
         }
-        return visited.Keys.Count();
+        // Console.WriteLine($"h=({hx}, {hy}) t=({tx}, {ty})");
+        return visited.Keys.Count() + 1;
     }
 
     private static void Increment(Dictionary<string, int> dict, string key)
@@ -73,7 +82,7 @@ public static class Day9
         string[] split;
         Func<string, (string, int)> func = x =>
         {
-            split = x.Split(" ");
+            split = x.Trim().Split(" ");
             return (split[0], Convert.ToInt32(split[1]));
         };
         (string, int)[] data = File.ReadLines("Data/day9.txt")
@@ -114,21 +123,14 @@ public static class Day8
                             .Select(x => x.Trim())
                             .ToArray();
         List<int> scores = new();
-        int maxR = 0, maxC = 0, maxVal = 0, val = 0;
+        int val = 0;
         for (int row = 1; row < data[0].Count() - 1; row++)
             for (int col = 1; col < data.Count() - 1; col++)
             {
                 val = TreesVisible(data, row, col);
-                if (val > maxVal)
-                {
-                    maxVal = val;
-                    maxR = row;
-                    maxC = col;
-                }
                 scores.Add(val);
             }
         int max = scores.Max();
-        // Console.WriteLine($"max row {maxR} col {maxC}");
         return max;
     }
 
@@ -190,7 +192,6 @@ public static class Day8
                         .ToArray();
         int rightCount = CountVisible(rights, pointVal);
         int scenicScore = upCount * downCount * leftCount * rightCount;
-        // Console.WriteLine($"{row}-{col}: up {upCount} down {downCount} left {leftCount} right {rightCount} score {scenicScore}");
         return scenicScore;
     }
 
