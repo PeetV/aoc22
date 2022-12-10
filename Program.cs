@@ -30,6 +30,7 @@ public static class Day10
     {
         List<(int, int)> queue = GetQue();
         int currentCrt = 0;
+        int[] newRowAt = { 40, 80, 120, 160, 200, 240 };
         foreach ((int cycle, int x) in queue)
         {
 
@@ -38,8 +39,7 @@ public static class Day10
             else
                 Console.Write(".");
             currentCrt += 1;
-            if (cycle == 40 | cycle == 80 | cycle == 120 |
-                cycle == 160 | cycle == 200 | cycle == 240)
+            if (newRowAt.Contains(cycle))
             {
                 currentCrt = 0;
                 Console.WriteLine("");
