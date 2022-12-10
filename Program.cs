@@ -60,17 +60,14 @@ public static class Day10
             {
                 cycle += 1;
                 queue.Add((cycle, x));
-                // Console.WriteLine($"Cycle {cycle}: {instr} {val} x={x}");
             }
             else if (instr == "addx")
             {
                 cycle += 1;
                 queue.Add((cycle, x));
-                // Console.WriteLine($"Cycle {cycle}: {instr} {val} x={x}");
                 cycle += 1;
                 queue.Add((cycle, x));
                 x += val;
-                // Console.WriteLine($"Cycle {cycle}: {instr} {val} x={x}");
             }
         }
         return queue;
@@ -100,63 +97,89 @@ public static class Day9
         Console.WriteLine("Advent of Code 2022 Day 9");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine($"Part 1: {Part1()}");
-        // Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine($"Part 2: {Part2()}");
     }
 
     public static int Part1()
     {
+        (string, int)[] data = GetData();
         int hx = 0, hy = 0, tx = 0, ty = 0;
         Dictionary<string, int> visited = new() { { "0-0", 1 } };
-        (string, int)[] data = GetData();
         foreach ((string dir, int steps) in data)
         {
             for (int step = 0; step < steps; step++)
             {
                 switch (dir)
                 {
-                    case "R":
-                        hx++;
-                        if (Math.Abs(hx - tx) > 1)
-                        {
-                            tx = hx - 1;
-                            ty = hy;
-                            Increment(visited, $"{tx}-{ty}");
-                        }
-                        break;
-                    case "L":
-                        hx--;
-                        if (Math.Abs(hx - tx) > 1)
-                        {
-                            tx = hx + 1;
-                            ty = hy;
-                            Increment(visited, $"{tx}-{ty}");
-                        }
-                        break;
-                    case "U":
-                        hy++;
-                        if (Math.Abs(hy - ty) > 1)
-                        {
-                            ty = hy - 1;
-                            tx = hx;
-                            Increment(visited, $"{tx}-{ty}");
-                        }
-                        break;
-                    case "D":
-                        hy--;
-                        if (Math.Abs(hy - ty) > 1)
-                        {
-                            ty = hy + 1;
-                            tx = hx;
-                            Increment(visited, $"{tx}-{ty}");
-                        }
-                        break;
-                    default:
-                        throw new ArgumentException("Unknown direction");
+                    case "R": hx++; break;
+                    case "L": hx--; break;
+                    case "U": hy++; break;
+                    case "D": hy--; break;
                 };
+                (tx, ty) = UpdateFollower(hx, hy, tx, ty);
+                Increment(visited, $"{tx}-{ty}");
             }
         }
-        // Console.WriteLine($"h=({hx}, {hy}) t=({tx}, {ty})");
         return visited.Keys.Count();
+    }
+
+    public static int Part2()
+    {
+        // (string, int)[] data = GetData();
+        // List<(int, int)> knots = Enumerable.Repeat((0, 0), 10).ToList();
+        // Dictionary<string, int> visited = new() { { "0-0", 1 } };
+        // foreach ((string dir, int steps) in data)
+        // {
+        //     for (int step = 0; step < steps; step++)
+        //     {
+        //         (int hx, int hy) = knots[0];
+        //         switch (dir)
+        //         {
+        //             case "R": hx++; break;
+        //             case "L": hx--; break;
+        //             case "U": hy++; break;
+        //             case "D": hy--; break;
+        //         };
+        //         knots[0] = (hx, hy);
+        //         for (int i = 0; i < knots.Count() - 1; i++)
+        //         {
+        //             (int hX, int hY) = knots[i];
+        //             (int tX, int tY) = knots[i + 1];
+        //             (tX, tY) = UpdateFollower(hX, hY, tX, tY);
+        //             knots[i + 1] = (tX, tY);
+        //         }
+        //         (int tx, int ty) = knots[9];
+        //         Increment(visited, $"{tx}-{ty}");
+        //     }
+        //     Console.WriteLine(string.Join(",", knots));
+        // }
+        // return visited.Keys.Count();
+        return 0;
+    }
+
+    private static (int, int) UpdateFollower(int hx, int hy, int tx, int ty)
+    {
+        if ((hx - tx) > 1)
+        {
+            tx = hx - 1;
+            ty = hy;
+        }
+        if ((tx - hx) > 1)
+        {
+            tx = hx + 1;
+            ty = hy;
+        }
+        if ((hy - ty) > 1)
+        {
+            ty = hy - 1;
+            tx = hx;
+        }
+        if ((ty - hy) > 1)
+        {
+            ty = hy + 1;
+            tx = hx;
+        }
+        return (tx, ty);
     }
 
     private static void Increment(Dictionary<string, int> dict, string key)
