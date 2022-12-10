@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 
 Day8.Solution();
 
@@ -32,10 +32,22 @@ public static class Day8
                             .Select(x => x.Trim())
                             .ToArray();
         List<int> scores = new();
+        int maxR = 0, maxC = 0, maxVal = 0, val = 0;
         for (int row = 1; row < data[0].Count() - 1; row++)
             for (int col = 1; col < data.Count() - 1; col++)
-                scores.Add(TreesVisible(data, row, col));
-        return scores.Max();
+            {
+                val = TreesVisible(data, row, col);
+                if (val > maxVal)
+                {
+                    maxVal = val;
+                    maxR = row;
+                    maxC = col;
+                }
+                scores.Add(val);
+            }
+        int max = scores.Max();
+        // Console.WriteLine($"max row {maxR} col {maxC}");
+        return max;
     }
 
     public static int CountPerimeter(string[] data)
@@ -72,37 +84,47 @@ public static class Day8
 
     public static int TreesVisible(string[] data, int row, int col)
     {
+        int pointVal = Convert.ToInt32(data[row][col] - '0');
         // looking up
         int[] ups = Enumerable.Range(0, row)
                               .Select(x => Convert.ToInt32(data[x][col] - '0'))
                               .Reverse()
                               .ToArray();
-        int upCount = CountVisible(ups);
-        Console.WriteLine(string.Join(",", ups));
-				// looking down
-        int[] downs = Enumerable.Range(row + 1, Data.Counts() - row - 1);
+        int upCount = CountVisible(ups, pointVal);
+        // looking down
+        int[] downs = Enumerable.Range(row + 1, data.Count() - row - 1)
                                 .Select(x => Convert.ToInt32(data[x][col] - '0'))
                                 .ToArray();
-        int downCount = CountVisible(downs);
-				// looking left
-				int[] lefts = Enumerable.Range(0, col - 1);
-                                .Select(x => Convert.ToInt32(data[row][x] - '0'))
-																.Reverse()
-                                .ToArray();
-				int leftCount = CountVisible(lefts);
-				// looking right
-				int[] rights = Enumerable.Range(col + 1, data[0].Counts() - col - 1);
-                                 .Select(x => Convert.ToInt32(data[row][x] - '0'))
-                                 .ToArray();
-				int rightCount = CountVisible(rights);
-        Console.WriteLine(string.Join(",", ups));
-        // Console.WriteLine($"{row}-{col} up count {upCount}");
-        return 0;
+        int downCount = CountVisible(downs, pointVal);
+        // looking left
+        int[] lefts = Enumerable.Range(0, col)
+                        .Select(x => Convert.ToInt32(data[row][x] - '0'))
+                        .Reverse()
+                        .ToArray();
+        int leftCount = CountVisible(lefts, pointVal);
+        // looking right
+        int[] rights = Enumerable.Range(col + 1, data[0].Count() - col - 1)
+                        .Select(x => Convert.ToInt32(data[row][x] - '0'))
+                        .ToArray();
+        int rightCount = CountVisible(rights, pointVal);
+        int scenicScore = upCount * downCount * leftCount * rightCount;
+        // Console.WriteLine($"{row}-{col}: up {upCount} down {downCount} left {leftCount} right {rightCount} score {scenicScore}");
+        return scenicScore;
     }
 
-    private static int CountVisible(int[] heights)
+    private static int CountVisible(int[] heights, int currentHeight)
     {
-				return 0;
+        int count = 0;
+        for (int i = 0; i < heights.Length; i++)
+        {
+            if (heights[i] >= currentHeight)
+            {
+                count++;
+                break;
+            }
+            count++;
+        }
+        return count;
     }
 
 }
