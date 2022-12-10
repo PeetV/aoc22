@@ -17,7 +17,7 @@ public static class Day9
     public static int Part1()
     {
         int hx = 0, hy = 0, tx = 0, ty = 0;
-        Dictionary<string, int> visited = new();
+        Dictionary<string, int> visited = new() { { "0-0", 1 } };
         (string, int)[] data = GetData();
         foreach ((string dir, int steps) in data)
         {
@@ -56,7 +56,7 @@ public static class Day9
                         hy--;
                         if (Math.Abs(hy - ty) > 1)
                         {
-                            ty = hy - 1;
+                            ty = hy + 1;
                             tx = hx;
                             Increment(visited, $"{tx}-{ty}");
                         }
@@ -67,7 +67,7 @@ public static class Day9
             }
         }
         // Console.WriteLine($"h=({hx}, {hy}) t=({tx}, {ty})");
-        return visited.Keys.Count() + 1;
+        return visited.Keys.Count();
     }
 
     private static void Increment(Dictionary<string, int> dict, string key)
