@@ -1,6 +1,64 @@
 ﻿using System.Linq;
 
-Day9.Solution();
+Day10.Solution();
+
+public static class Day10
+{
+    public static void Solution()
+    {
+        Console.WriteLine("Advent of Code 2022 Day 10");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.Write("Part 1: ");
+        Part1();
+    }
+
+    public static void Part1()
+    {
+        int cycle = 0;
+        int x = 1;
+        (string, int)[] instructions = GetData();
+        List<(int, int)> queue = new();
+        List<(int, int)> tail = new();
+        foreach ((string instr, int val) in instructions)
+        {
+            if (instr == "noop")
+            {
+                cycle += 1;
+                queue.Add((cycle, x));
+            }
+            else if (instr == "addx")
+            {
+                cycle += 1;
+                queue.Add((cycle, x));
+                cycle += 1;
+                queue.Add((cycle, x));
+                x += val;
+            }
+        }
+        int result = (queue[19].Item1 * queue[19].Item2) +
+                     (queue[59].Item1 * queue[59].Item2) +
+                     (queue[99].Item1 * queue[99].Item2) +
+                     (queue[139].Item1 * queue[139].Item2) +
+                     (queue[179].Item1 * queue[179].Item2) +
+                     (queue[219].Item1 * queue[219].Item2);
+        Console.WriteLine(result);
+    }
+
+    public static (string, int)[] GetData()
+    {
+        string[] split;
+        Func<string, (string, int)> func = x =>
+        {
+            if (x == "noop") return ("noop", 0);
+            split = x.Trim().Split(" ");
+            return (split[0], Convert.ToInt32(split[1]));
+        };
+        (string, int)[] data = File.ReadLines("Data/day10.txt")
+                                   .Select(x => func(x))
+                                   .ToArray();
+        return data;
+    }
+}
 
 public static class Day9
 {
