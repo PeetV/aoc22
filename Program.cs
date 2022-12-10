@@ -1,6 +1,88 @@
 ﻿using System.Linq;
 
-Day8.Solution();
+Day9.Solution();
+
+public static class Day9
+{
+
+    public static void Solution()
+    {
+
+        Console.WriteLine("Advent of Code 2022 Day 9");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Part1()}");
+        // Console.WriteLine($"Part 2: {Part2()}");
+    }
+
+    public static int Part1()
+    {
+        int hx = 0, hy = 0, tx = 0, ty = 0;
+        Dictionary<string, int> visited = new();
+        (string, int)[] data = GetData();
+        foreach ((string dir, int steps) in data)
+        {
+            for (int step = 0; step < steps; step++)
+            {
+                switch (dir)
+                {
+                    case "R": hx += 1; break;
+                    case "L": hx -= 1; break;
+                    case "U": hy -= 1; break;
+                    case "D": hy += 1; break;
+                };
+                if (hx == tx & hy == ty) continue;
+                // moved right
+                if ((hx - tx) > 1 & hy == ty)
+                {
+                    tx++;
+                    Increment(visited, $"{tx}-{ty}");
+                }
+                // moved left
+                if ((tx - hx) > 1 & hy == ty)
+                {
+                    tx--;
+                    Increment(visited, $"{tx}-{ty}");
+                }
+                // moved up
+                if ((ty - hy) > 1 & hx == tx)
+                {
+                    ty--;
+                    Increment(visited, $"{tx}-{ty}");
+                }
+                // moved down
+                if ((hy - ty) > 1 & hx == tx)
+                {
+                    ty++;
+                    Increment(visited, $"{tx}-{ty}");
+                }
+
+            }
+        }
+        return visited.Keys.Count();
+    }
+
+    private static void Increment(Dictionary<string, int> dict, string key)
+    {
+        if (dict.ContainsKey(key))
+            dict[key] += 1;
+        else dict[key] = 1;
+    }
+
+    public static (string, int)[] GetData()
+    {
+        string[] split;
+        Func<string, (string, int)> func = x =>
+        {
+            split = x.Split(" ");
+            return (split[0], Convert.ToInt32(split[1]));
+        };
+        (string, int)[] data = File.ReadLines("Data/day9.txt")
+                                   .Select(x => func(x))
+                                   .ToArray();
+        return data;
+    }
+
+}
 
 public static class Day8
 {
