@@ -7,7 +7,7 @@ public static class Day10
     public static void Solution()
     {
         Console.WriteLine("Advent of Code 2022 Day 10");
-        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.Write("Part 1: ");
         Part1();
         Console.WriteLine("Part 2: ");
@@ -18,11 +18,11 @@ public static class Day10
     {
         List<(int, int)> queue = GetQue();
         int result = (queue[19].Item1 * queue[19].Item2) +
-                             (queue[59].Item1 * queue[59].Item2) +
-                             (queue[99].Item1 * queue[99].Item2) +
-                             (queue[139].Item1 * queue[139].Item2) +
-                             (queue[179].Item1 * queue[179].Item2) +
-                             (queue[219].Item1 * queue[219].Item2);
+                     (queue[59].Item1 * queue[59].Item2) +
+                     (queue[99].Item1 * queue[99].Item2) +
+                     (queue[139].Item1 * queue[139].Item2) +
+                     (queue[179].Item1 * queue[179].Item2) +
+                     (queue[219].Item1 * queue[219].Item2);
         Console.WriteLine(result);
     }
 
@@ -76,14 +76,14 @@ public static class Day10
     public static (string, int)[] GetData()
     {
         string[] split;
-        Func<string, (string, int)> func = x =>
+        Func<string, (string, int)> processData = x =>
         {
             if (x == "noop") return ("noop", 0);
             split = x.Trim().Split(" ");
             return (split[0], Convert.ToInt32(split[1]));
         };
         (string, int)[] data = File.ReadLines("Data/day10.txt")
-                                   .Select(x => func(x))
+                                   .Select(x => processData(x))
                                    .ToArray();
         return data;
     }
