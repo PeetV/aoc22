@@ -10,9 +10,44 @@ public static class Day10
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.Write("Part 1: ");
         Part1();
+        Console.WriteLine("Part 2: ");
+        Part2();
     }
 
     public static void Part1()
+    {
+        List<(int, int)> queue = GetQue();
+        int result = (queue[19].Item1 * queue[19].Item2) +
+                             (queue[59].Item1 * queue[59].Item2) +
+                             (queue[99].Item1 * queue[99].Item2) +
+                             (queue[139].Item1 * queue[139].Item2) +
+                             (queue[179].Item1 * queue[179].Item2) +
+                             (queue[219].Item1 * queue[219].Item2);
+        Console.WriteLine(result);
+    }
+
+    public static void Part2()
+    {
+        List<(int, int)> queue = GetQue();
+        int currentCrt = 0;
+        foreach ((int cycle, int x) in queue)
+        {
+
+            if (currentCrt >= x - 1 & currentCrt <= x + 1)
+                Console.Write("#");
+            else
+                Console.Write(".");
+            currentCrt += 1;
+            if (cycle == 40 | cycle == 80 | cycle == 120 |
+                cycle == 160 | cycle == 200 | cycle == 240)
+            {
+                currentCrt = 0;
+                Console.WriteLine("");
+            }
+        }
+    }
+
+    public static List<(int, int)> GetQue()
     {
         int cycle = 0;
         int x = 1;
@@ -25,23 +60,20 @@ public static class Day10
             {
                 cycle += 1;
                 queue.Add((cycle, x));
+                // Console.WriteLine($"Cycle {cycle}: {instr} {val} x={x}");
             }
             else if (instr == "addx")
             {
                 cycle += 1;
                 queue.Add((cycle, x));
+                // Console.WriteLine($"Cycle {cycle}: {instr} {val} x={x}");
                 cycle += 1;
                 queue.Add((cycle, x));
                 x += val;
+                // Console.WriteLine($"Cycle {cycle}: {instr} {val} x={x}");
             }
         }
-        int result = (queue[19].Item1 * queue[19].Item2) +
-                     (queue[59].Item1 * queue[59].Item2) +
-                     (queue[99].Item1 * queue[99].Item2) +
-                     (queue[139].Item1 * queue[139].Item2) +
-                     (queue[179].Item1 * queue[179].Item2) +
-                     (queue[219].Item1 * queue[219].Item2);
-        Console.WriteLine(result);
+        return queue;
     }
 
     public static (string, int)[] GetData()
