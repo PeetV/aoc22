@@ -7,7 +7,6 @@ public static class Day9
 
     public static void Solution()
     {
-
         Console.WriteLine("Advent of Code 2022 Day 9");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine($"Part 1: {Part1()}");
