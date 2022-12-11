@@ -17,12 +17,8 @@ public static class Day10
     public static void Part1()
     {
         List<(int, int)> queue = GetQue();
-        int result = (queue[19].Item1 * queue[19].Item2) +
-                     (queue[59].Item1 * queue[59].Item2) +
-                     (queue[99].Item1 * queue[99].Item2) +
-                     (queue[139].Item1 * queue[139].Item2) +
-                     (queue[179].Item1 * queue[179].Item2) +
-                     (queue[219].Item1 * queue[219].Item2);
+        int[] slots = { 19, 59, 99, 139, 179, 219 };
+        int result = slots.Select(x => queue[x].Item1 * queue[x].Item2).Sum();
         Console.WriteLine(result);
     }
 
@@ -33,7 +29,6 @@ public static class Day10
         int[] newRowAt = { 40, 80, 120, 160, 200, 240 };
         foreach ((int cycle, int x) in queue)
         {
-
             if (currentCrt >= x - 1 & currentCrt <= x + 1)
                 Console.Write("#");
             else
@@ -91,7 +86,6 @@ public static class Day10
 
 public static class Day9
 {
-
     public static void Solution()
     {
         Console.WriteLine("Advent of Code 2022 Day 9");
@@ -264,7 +258,6 @@ public static class Day9
 
 public static class Day8
 {
-
     public static void Solution()
     {
         Console.WriteLine("Advent of Code 2022 Day 8");
@@ -377,7 +370,6 @@ public static class Day8
         }
         return count;
     }
-
 }
 
 public static class Day7
@@ -468,12 +460,10 @@ public static class Day7
             buffer.Clear();
         }
     }
-
 }
 
 public static class Day6
 {
-
     public static void Solution()
     {
         Console.WriteLine("Advent of Code 2022 Day 6");
@@ -496,12 +486,10 @@ public static class Day6
         }
         return 0;
     }
-
 }
 
 public static class Day5
 {
-
     public static void Solution()
     {
         Console.WriteLine("Advent of Code 2022 Day 5");
@@ -568,12 +556,10 @@ public static class Day5
         }
         return instructions.ToArray();
     }
-
 }
 
 public static class Day4
 {
-
     public static void SolutionPart1()
     {
         var scores = File.ReadLines("Data/day4.txt")
@@ -609,12 +595,10 @@ public static class Day4
         if (right[1] >= left[0] & right[1] <= left[1]) return 1;
         return 0;
     }
-
 }
 
 public static class Day3
 {
-
     public static void SolutionPart1()
     {
         var s = new Scorer();
@@ -679,7 +663,6 @@ public static class Day3
             return 0;
         }
     }
-
 }
 
 public static class Day2
@@ -742,7 +725,6 @@ public static class Day2
 
 public static class Day1
 {
-
     public static void SolutionPart1()
     {
         List<int> totals = GetTotals();
@@ -775,5 +757,4 @@ public static class Day1
         }
         return totals;
     }
-
 }
