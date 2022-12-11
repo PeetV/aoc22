@@ -16,7 +16,7 @@ public static class Day11
 
     public static int Part1()
     {
-        List<Monkey> monkeys = GetMonkeys(worryLevel: 3);
+        List<Monkey> monkeys = GetMonkeys();
         int rounds = 20;
         for (int r = 0; r < rounds; r++)
         {
@@ -29,8 +29,8 @@ public static class Day11
 
     public static int Part2()
     {
-        List<Monkey> monkeys = GetMonkeys(worryLevel: 1);
-        int rounds = 1;
+        List<Monkey> monkeys = GetMonkeys();
+        int rounds = 20;
         for (int r = 0; r < rounds; r++)
         {
             foreach (var monkey in monkeys) monkey.PlayRoundPart2(monkeys);
@@ -82,7 +82,6 @@ public static class Day11
             if (operationString.Contains("+")) op = "+";
             else op = "*";
             splits = operationString.Split($" {op} ");
-            // Console.WriteLine(string.Join(",", splits));
             if (splits[0] == "old" & splits[1] == "old" & op == "+")
                 operation = x => x + x;
             if (splits[0] == "old" & splits[1] == "old" & op == "*")
@@ -120,17 +119,22 @@ public static class Day11
                 worry = operation(item);
                 // worry /= 3;
                 if ((worry % divisibleBy) == 0)
+                {
+                    worry = 1;
                     monkeys[monkeyOnTrue].items.Add(worry);
-                else monkeys[monkeyOnFalse].items.Add(worry);
+                }
+                else
+                {
+                    worry = worry % divisibleBy;
+                    monkeys[monkeyOnFalse].items.Add(worry);
+                }
                 inspectionCount++;
             }
             items.Clear();
         }
-
-
     }
 
-    public static List<Monkey> GetMonkeys(int worryLevel)
+    public static List<Monkey> GetMonkeys()
     {
         string[] data = File.ReadLines("Data/day11.txt")
                             .Select(x => x.Trim())
