@@ -116,7 +116,7 @@ public static class Day9
                     case "U": hy++; break;
                     case "D": hy--; break;
                 };
-                (tx, ty) = UpdateFollower(hx, hy, tx, ty);
+                (tx, ty) = UpdateFollowerPart1(hx, hy, tx, ty);
                 Increment(visited, $"{tx}-{ty}");
             }
         }
@@ -125,39 +125,39 @@ public static class Day9
 
     public static int Part2()
     {
-        // (string, int)[] data = GetData();
-        // List<(int, int)> knots = Enumerable.Repeat((0, 0), 10).ToList();
-        // Dictionary<string, int> visited = new() { { "0-0", 1 } };
-        // foreach ((string dir, int steps) in data)
-        // {
-        //     for (int step = 0; step < steps; step++)
-        //     {
-        //         (int hx, int hy) = knots[0];
-        //         switch (dir)
-        //         {
-        //             case "R": hx++; break;
-        //             case "L": hx--; break;
-        //             case "U": hy++; break;
-        //             case "D": hy--; break;
-        //         };
-        //         knots[0] = (hx, hy);
-        //         for (int i = 0; i < knots.Count() - 1; i++)
-        //         {
-        //             (int hX, int hY) = knots[i];
-        //             (int tX, int tY) = knots[i + 1];
-        //             (tX, tY) = UpdateFollower(hX, hY, tX, tY);
-        //             knots[i + 1] = (tX, tY);
-        //         }
-        //         (int tx, int ty) = knots[9];
-        //         Increment(visited, $"{tx}-{ty}");
-        //     }
-        //     Console.WriteLine(string.Join(",", knots));
-        // }
-        // return visited.Keys.Count();
-        return 0;
+        (string, int)[] data = GetData();
+        List<(int, int)> knots = Enumerable.Repeat((0, 0), 10).ToList();
+        Dictionary<string, int> visited = new() { { "0-0", 1 } };
+        foreach ((string dir, int steps) in data)
+        {
+            for (int step = 0; step < steps; step++)
+            {
+                // Move head knot
+                (int hx, int hy) = knots[0];
+                switch (dir)
+                {
+                    case "R": hx++; break;
+                    case "L": hx--; break;
+                    case "U": hy++; break;
+                    case "D": hy--; break;
+                };
+                knots[0] = (hx, hy);
+                // Move following knots
+                for (int i = 0; i < knots.Count() - 1; i++)
+                {
+                    (int hX, int hY) = knots[i];
+                    (int tX, int tY) = knots[i + 1];
+                    (tX, tY) = UpdateFollowerPart2(hX, hY, tX, tY);
+                    knots[i + 1] = (tX, tY);
+                }
+                (int tx, int ty) = knots[9];
+                Increment(visited, $"{tx}-{ty}");
+            }
+        }
+        return visited.Keys.Count();
     }
 
-    private static (int, int) UpdateFollower(int hx, int hy, int tx, int ty)
+    private static (int, int) UpdateFollowerPart1(int hx, int hy, int tx, int ty)
     {
         if ((hx - tx) > 1)
         {
@@ -178,6 +178,63 @@ public static class Day9
         {
             ty = hy + 1;
             tx = hx;
+        }
+        return (tx, ty);
+    }
+
+    private static (int, int) UpdateFollowerPart2(int hx, int hy, int tx, int ty)
+    {
+        // Scenarios:
+        //    A     B     C     D     E     F     G     H
+        //  -----|-----|-----|-----|-----|-----|-----|-----|
+        //  . H .|. H H|. . .|T . .|. T .|. . T|. . .|H H .|
+        //  . - .|. - H|T - H|. - H|. - .|H - .|H - T|H - .|
+        //  . T .|T . .|. . .|. H H|. H .|H H .|. . .|. . T|
+        // Scenario A
+        if ((hy - ty) == 2 & hx == tx)
+        {
+            ty++;
+            return (tx, ty);
+        }
+        // Scenario B
+        if (((hy - ty) == 2 & (hx - tx) >= 1) | ((hy - ty) == 1 & (hx - tx) == 2))
+        {
+            tx++;
+            ty++;
+            return (tx, ty);
+        }
+        // Scenario C
+        if ((hx - tx) == 2 & hy == ty)
+        {
+            tx++;
+        }
+        // Scenario D
+        if (((ty - hy) == 2 & (hx - tx) >= 1) | ((ty - hy) == 1 & (hx - tx) == 2))
+        {
+            tx++;
+            ty--;
+        }
+        // Scenario E
+        if ((ty - hy) > 1 & hx == tx)
+        {
+            ty = hy + 1;
+        }
+        // Scenario F
+        if (((ty - hy) == 2 & (tx - hx) >= 1) | ((ty - hy) == 1 & (tx - hx) == 2))
+        {
+            tx--;
+            ty--;
+        }
+        // Scenario G
+        if ((tx - hx) >= 1 & hy == ty)
+        {
+            tx = hx + 1;
+        }
+        // Scenario H
+        if (((hy - ty) == 2 & (tx - hx) >= 1) | ((hy - ty) == 1) & (tx - hx) == 2)
+        {
+            tx--;
+            ty++;
         }
         return (tx, ty);
     }
