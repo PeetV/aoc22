@@ -9,9 +9,114 @@ public static class Day11
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine("Advent of Code 2022 Day 11");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        Console.WriteLine("Part 1: ");
+        Console.WriteLine($"Part 1: {Part1()}");
         Console.WriteLine("Part 2: ");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    public static int Part1()
+    {
+        List<Monkey> monkeys = GetMonkeys();
+        // foreach (var monkey in monkeys) Console.WriteLine(monkey.operation(2));
+        return 0;
+    }
+
+    public class Monkey
+    {
+        public List<int> items;
+        public Func<int, int> operation;
+        public string operationString;
+        public int divisibleBy;
+        public int monkeyOnTrue;
+        public int monkeyOnFalse;
+
+        public Monkey(
+            int[] items,
+            string operationString,
+            int divisibleBy,
+            int monkeyOnTrue,
+            int monkeyOnFalse
+        )
+        {
+            this.items = new List<int>(items);
+            this.operationString = operationString;
+            this.divisibleBy = divisibleBy;
+            this.monkeyOnTrue = monkeyOnTrue;
+            this.monkeyOnFalse = monkeyOnFalse;
+            operationStringToFunc();
+        }
+
+        public override string ToString()
+        {
+            return $"Monkey(items=[{string.Join(",", items)}], operation={operationString}, divisible={divisibleBy}, true={monkeyOnTrue}, false={monkeyOnFalse})";
+        }
+
+        private void operationStringToFunc()
+        {
+            string[] splits = { };
+            string op;
+            if (operationString.Contains("+")) op = "+";
+            else op = "*";
+            splits = operationString.Split($" {op} ");
+            // Console.WriteLine(string.Join(",", splits));
+            if (splits[0] == "old" & splits[1] == "old" & op == "+")
+                operation = x => x + x;
+            if (splits[0] == "old" & splits[1] == "old" & op == "*")
+                operation = x => x * x;
+            if (splits[0] == "old" & splits[1] != "old" & op == "+")
+                operation = x => x + Convert.ToInt32(splits[1]);
+            if (splits[0] != "old" & splits[1] == "old" & op == "+")
+                operation = x => Convert.ToInt32(splits[0]) + x;
+            if (splits[0] == "old" & splits[1] != "old" & op == "*")
+                operation = x => x * Convert.ToInt32(splits[1]);
+            if (splits[0] != "old" & splits[1] == "old" & op == "*")
+                operation = x => Convert.ToInt32(splits[0]) * x;
+        }
+
+        public void PlayRound(List<Monkey> monkeys)
+        {
+
+        }
+    }
+
+    public static List<Monkey> GetMonkeys()
+    {
+        string[] data = File.ReadLines("Data/day11.txt")
+                            .Select(x => x.Trim())
+                            .ToArray();
+        List<Monkey> monkeys = new();
+        int[] items = { };
+        string[] split;
+        string line, sub, operationString = "";
+        int divisibleBy = 0, monkeyTrue = 0, monkeyFalse = 0;
+        for (int i = 0; i < data.Length; i++)
+        {
+            line = data[i];
+            if (line.Trim().StartsWith("Starting items:"))
+            {
+                sub = line[15..line.Count()];
+                if (!sub.Contains(","))
+                    split = new string[] { sub };
+                else
+                    split = sub.Split(",");
+                items = split.Select(x => x.Trim())
+                             .Select(x => Convert.ToInt32(x))
+                             .ToArray();
+            }
+            if (line.Trim().StartsWith("Operation: new = "))
+                operationString = line[17..line.Count()];
+            if (line.Trim().StartsWith("Test: divisible by "))
+                divisibleBy = Convert.ToInt32(line[19..line.Count()]);
+            if (line.Trim().StartsWith("If true: throw to monkey "))
+                monkeyTrue = Convert.ToInt32(line[25..line.Count()]);
+            if (line.Trim().StartsWith("If false: throw to monkey "))
+                monkeyFalse = Convert.ToInt32(line[26..line.Count()]);
+            if (line == "" | i == data.Length - 1)
+            {
+                monkeys.Add(new Monkey(items, operationString, divisibleBy, monkeyTrue, monkeyFalse));
+            }
+        }
+        return monkeys;
     }
 }
 
