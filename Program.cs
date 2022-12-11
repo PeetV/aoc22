@@ -1,17 +1,32 @@
 ﻿using System.Linq;
 
-Day10.Solution();
+Day11.Solution();
+
+public static class Day11
+{
+    public static void Solution()
+    {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine("Advent of Code 2022 Day 11");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine("Part 1: ");
+        Console.WriteLine("Part 2: ");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+}
 
 public static class Day10
 {
     public static void Solution()
     {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine("Advent of Code 2022 Day 10");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.Write("Part 1: ");
         Part1();
         Console.WriteLine("Part 2: ");
         Part2();
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
     public static void Part1()
@@ -88,10 +103,12 @@ public static class Day9
 {
     public static void Solution()
     {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine("Advent of Code 2022 Day 9");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine($"Part 1: {Part1()}");
         Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
     public static int Part1()
@@ -260,10 +277,12 @@ public static class Day8
 {
     public static void Solution()
     {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine("Advent of Code 2022 Day 8");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine($"Part 1: {Part1()}");
         Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
     public static int Part1()
@@ -376,10 +395,12 @@ public static class Day7
 {
     public static void Solution()
     {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine("Advent of Code 2022 Day 7");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine($"Part 1: {Part1()}");
         Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
     public static int Part1()
@@ -466,10 +487,12 @@ public static class Day6
 {
     public static void Solution()
     {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine("Advent of Code 2022 Day 6");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine($"Part 1: {ProcessStream(offset: 4)}");
         Console.WriteLine($"Part 2: {ProcessStream(offset: 14)}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
     public static int ProcessStream(int offset)
@@ -492,10 +515,12 @@ public static class Day5
 {
     public static void Solution()
     {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine("Advent of Code 2022 Day 5");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine($"Part 1: {Day5.ProcessData()}");
         Console.WriteLine($"Part 2: {Day5.ProcessData(reverseBuffer: true)}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
     public static string ProcessData(bool reverseBuffer = false)
