@@ -10,25 +10,47 @@ public static class Day11
         Console.WriteLine("Advent of Code 2022 Day 11");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine($"Part 1: {Part1()}");
-        Console.WriteLine("Part 2: ");
+        Console.WriteLine($"Part 2: {Part2()}");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
     public static int Part1()
     {
-        List<Monkey> monkeys = GetMonkeys();
-        // foreach (var monkey in monkeys) Console.WriteLine(monkey.operation(2));
-        return 0;
+        List<Monkey> monkeys = GetMonkeys(worryLevel: 3);
+        int rounds = 20;
+        for (int r = 0; r < rounds; r++)
+        {
+            foreach (var monkey in monkeys) monkey.PlayRoundPart1(monkeys);
+        }
+        int[] counts = monkeys.Select(x => x.inspectionCount).ToArray();
+        counts = counts.OrderByDescending(x => x).ToArray();
+        return counts[0] * counts[1];
+    }
+
+    public static int Part2()
+    {
+        List<Monkey> monkeys = GetMonkeys(worryLevel: 1);
+        int rounds = 1;
+        for (int r = 0; r < rounds; r++)
+        {
+            foreach (var monkey in monkeys) monkey.PlayRoundPart2(monkeys);
+        }
+        foreach (var monkey in monkeys) Console.WriteLine(monkey);
+        int[] counts = monkeys.Select(x => x.inspectionCount).ToArray();
+        counts = counts.OrderByDescending(x => x).ToArray();
+        // Console.WriteLine(string.Join(",", counts));
+        return counts[0] * counts[1];
     }
 
     public class Monkey
     {
         public List<int> items;
-        public Func<int, int> operation;
+        public Func<int, int> operation = x => x;
         public string operationString;
         public int divisibleBy;
         public int monkeyOnTrue;
         public int monkeyOnFalse;
+        public int worryLevel;
         public int inspectionCount;
 
         public Monkey(
@@ -50,7 +72,7 @@ public static class Day11
 
         public override string ToString()
         {
-            return $"Monkey(items=[{string.Join(",", items)}], operation={operationString}, divisible={divisibleBy}, true={monkeyOnTrue}, false={monkeyOnFalse})";
+            return $"Monkey(inspections={inspectionCount} items=[{string.Join(",", items)}], operation={operationString}, divisible={divisibleBy}, true={monkeyOnTrue}, false={monkeyOnFalse})";
         }
 
         private void OperationStringToFunc()
@@ -75,13 +97,40 @@ public static class Day11
                 operation = x => Convert.ToInt32(splits[0]) * x;
         }
 
-        public void PlayRound(List<Monkey> monkeys)
+        public void PlayRoundPart1(List<Monkey> monkeys)
         {
-
+            int worry;
+            foreach (int item in items)
+            {
+                worry = operation(item);
+                worry /= 3;
+                if ((worry % divisibleBy) == 0)
+                    monkeys[monkeyOnTrue].items.Add(worry);
+                else monkeys[monkeyOnFalse].items.Add(worry);
+                inspectionCount++;
+            }
+            items.Clear();
         }
+
+        public void PlayRoundPart2(List<Monkey> monkeys)
+        {
+            int worry;
+            foreach (int item in items)
+            {
+                worry = operation(item);
+                // worry /= 3;
+                if ((worry % divisibleBy) == 0)
+                    monkeys[monkeyOnTrue].items.Add(worry);
+                else monkeys[monkeyOnFalse].items.Add(worry);
+                inspectionCount++;
+            }
+            items.Clear();
+        }
+
+
     }
 
-    public static List<Monkey> GetMonkeys()
+    public static List<Monkey> GetMonkeys(int worryLevel)
     {
         string[] data = File.ReadLines("Data/day11.txt")
                             .Select(x => x.Trim())
