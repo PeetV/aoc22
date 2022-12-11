@@ -29,6 +29,7 @@ public static class Day11
         public int divisibleBy;
         public int monkeyOnTrue;
         public int monkeyOnFalse;
+        public int inspectionCount;
 
         public Monkey(
             int[] items,
@@ -43,7 +44,8 @@ public static class Day11
             this.divisibleBy = divisibleBy;
             this.monkeyOnTrue = monkeyOnTrue;
             this.monkeyOnFalse = monkeyOnFalse;
-            operationStringToFunc();
+            OperationStringToFunc();
+            this.inspectionCount = 0;
         }
 
         public override string ToString()
@@ -51,7 +53,7 @@ public static class Day11
             return $"Monkey(items=[{string.Join(",", items)}], operation={operationString}, divisible={divisibleBy}, true={monkeyOnTrue}, false={monkeyOnFalse})";
         }
 
-        private void operationStringToFunc()
+        private void OperationStringToFunc()
         {
             string[] splits = { };
             string op;
