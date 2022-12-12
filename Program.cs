@@ -17,9 +17,16 @@ public static class Day12
     public static int Part1()
     {
         Graph<string> graph = BuildGraph();
-        Console.WriteLine($"Graph created with {graph.nodes.Count()} nodes.");
-        (double shortest, string[] path) = graph.ShortestPathDijkstra("0-0", "2-5");
-        return (int)shortest;
+        // Console.WriteLine($"Graph created with {graph.nodes.Count()} nodes. Node 2444 {graph.nodes[1210]}.");
+        // (double shortest, string[] path) = graph.ShortestPathDijkstra("20-0", "20-52");
+        string[] walked = graph.WalkDepthFirst("20-0", includeBacktrack: false);
+        Console.WriteLine($"20-52 found in walk is {walked.Contains("20-52")}");
+        // Console.WriteLine(string.Join(",", walked));
+        // string[] nodes = graph.WalkDepthFirst("0-0", includeBacktrack: false);
+        // Console.WriteLine($"2-5 found in walk is {nodes.Contains("2-5")}");
+        // (double shortest, string[] path) = graph.ShortestPathDijkstra("0-0", "2-5");
+        // return (int)shortest;
+        return 0;
     }
 
     public static int Part2()
@@ -83,11 +90,14 @@ public static class Day12
     public static string[] AllowedChars(string current)
     {
         if (current == "S") return new string[] { "a" };
-        if (current == "E") return new string[] { "z" };
+        if (current == "z") return new string[] { "E" };
+        if (current == "E") return new string[] { };
         string letters = "SabcdefghijklmnopqrstuvwxyzE";
         int index = letters.IndexOf(current);
         if (index == -1) throw new System.ArgumentOutOfRangeException($"{current} not in {letters}");
-        return new string[] { letters[index - 1].ToString(), letters[index + 1].ToString() };
+        return new string[] { letters[index - 1].ToString(),
+                              current,
+                              letters[index + 1].ToString() };
     }
 }
 
