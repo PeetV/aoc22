@@ -25,7 +25,30 @@ public static class Day12
 
     public static int Part2()
     {
-        return 0;
+        Graph<string> graph = BuildGraph();
+        string[] data = File.ReadLines("Data/day12.txt")
+                                    .Select(x => x.Trim())
+                                    .ToArray();
+        string currentNode, currentChar;
+        double shortest;
+        List<string> candidates = new();
+        for (int row = 0; row < data.Length; row++)
+            for (int col = 0; col < data[0].Count(); col++)
+            {
+                currentNode = $"{row}-{col}";
+                currentChar = data[row][col].ToString();
+                if (currentChar != "a") continue;
+                candidates.Add(currentNode);
+            }
+        List<int> results = Enumerable.Repeat(0, candidates.Count()).ToList();
+        Parallel.For(0, candidates.Count(), x =>
+        {
+            currentNode = candidates[x];
+            // Console.WriteLine($"{currentNode}");
+            (shortest, _) = graph.ShortestPathDijkstra(currentNode, "20-52");
+            results[x] = (int)shortest;
+        });
+        return results.Where(x => x > 0).Min();
     }
 
     public static Graph<string> BuildGraph()
@@ -130,7 +153,6 @@ public static class Day11
         foreach (var monkey in monkeys) Console.WriteLine(monkey);
         int[] counts = monkeys.Select(x => x.inspectionCount).ToArray();
         counts = counts.OrderByDescending(x => x).ToArray();
-        // Console.WriteLine(string.Join(",", counts));
         return counts[0] * counts[1];
     }
 
