@@ -1,105 +1,101 @@
 ﻿using System.Linq;
 
-Day12.Solution();
+// Day12.Solution();
 
-public static class Day12
-{
-    public static void Solution()
-    {
-        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        Console.WriteLine("Advent of Code 2022 Day 12");
-        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        Console.WriteLine($"Part 1: {Part1()}");
-        Console.WriteLine($"Part 2: {Part2()}");
-        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    }
+// public static class Day12
+// {
+//     public static void Solution()
+//     {
+//         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+//         Console.WriteLine("Advent of Code 2022 Day 12");
+//         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+//         Console.WriteLine($"Part 1: {Part1()}");
+//         Console.WriteLine($"Part 2: {Part2()}");
+//         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+//     }
 
-    public static int Part1()
-    {
-        Graph<string> graph = BuildGraph();
-        // Console.WriteLine($"Graph created with {graph.nodes.Count()} nodes. Node 2444 {graph.nodes[1210]}.");
-        // (double shortest, string[] path) = graph.ShortestPathDijkstra("20-0", "20-52");
-        string[] walked = graph.WalkDepthFirst("20-0", includeBacktrack: false);
-        Console.WriteLine($"20-52 found in walk is {walked.Contains("20-52")}");
-        // Console.WriteLine(string.Join(",", walked));
-        // string[] nodes = graph.WalkDepthFirst("0-0", includeBacktrack: false);
-        // Console.WriteLine($"2-5 found in walk is {nodes.Contains("2-5")}");
-        // (double shortest, string[] path) = graph.ShortestPathDijkstra("0-0", "2-5");
-        // return (int)shortest;
-        return 0;
-    }
+//     public static int Part1()
+//     {
+//         Graph<string> graph = BuildGraph();
+//         // Console.WriteLine($"Node {nodeOfInterest}={graph.nodes[nodeOfInterest]}.");
+//         (double shortest, string[] path) = graph.ShortestPathDijkstra("20-0", "20-52");
+//         // string[] walked = graph.WalkDepthFirst("20-0", includeBacktrack: false);
+//         // string nodeCheck = "20-52";
+//         // Console.WriteLine($"{nodeCheck} found in walk is {walked.Contains(nodeCheck)}");
+//         // return 0;
+//         return (int)shortest;
+//     }
 
-    public static int Part2()
-    {
-        return 0;
-    }
+//     public static int Part2()
+//     {
+//         return 0;
+//     }
 
-    public static Graph<string> BuildGraph()
-    {
-        Graph<string> graph = new();
-        string[] data = File.ReadLines("Data/day12.txt")
-                            .Select(x => x.Trim())
-                            .ToArray();
-        // Add nodes
-        for (int row = 0; row < data.Length; row++)
-            for (int col = 0; col < data[0].Count(); col++)
-                graph.AddNode($"{row}-{col}");
-        // Add edges
-        string currentNode, nextNode, currentChar, nextChar;
-        for (int row = 0; row < data.Length; row++)
-            for (int col = 0; col < data[0].Count(); col++)
-            {
-                currentNode = $"{row}-{col}";
-                currentChar = data[row][col].ToString();
-                // Up
-                if (row > 0)
-                {
-                    nextNode = $"{row - 1}-{col}";
-                    nextChar = data[row - 1][col].ToString();
-                    if (AllowedChars(currentChar).Contains(nextChar))
-                        graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
-                }
-                // Down
-                if (row < data.Length - 1)
-                {
-                    nextNode = $"{row + 1}-{col}";
-                    nextChar = data[row + 1][col].ToString();
-                    if (AllowedChars(currentChar).Contains(nextChar))
-                        graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
-                }
-                // Left
-                if (col > 0)
-                {
-                    nextNode = $"{row}-{col - 1}";
-                    nextChar = data[row][col - 1].ToString();
-                    if (AllowedChars(currentChar).Contains(nextChar))
-                        graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
-                }
-                // Right
-                if (col < data[0].Count() - 1)
-                {
-                    nextNode = $"{row}-{col + 1}";
-                    nextChar = data[row][col + 1].ToString();
-                    if (AllowedChars(currentChar).Contains(nextChar))
-                        graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
-                }
-            }
-        return graph;
-    }
+//     public static Graph<string> BuildGraph()
+//     {
+//         Graph<string> graph = new();
+//         string[] data = File.ReadLines("Data/day12.txt")
+//                             .Select(x => x.Trim())
+//                             .ToArray();
+//         // Add nodes
+//         for (int row = 0; row < data.Length; row++)
+//             for (int col = 0; col < data[0].Count(); col++)
+//                 graph.AddNode($"{row}-{col}");
+//         // Add edges
+//         string currentNode, nextNode, currentChar, nextChar;
+//         for (int row = 0; row < data.Length; row++)
+//             for (int col = 0; col < data[0].Count(); col++)
+//             {
+//                 currentNode = $"{row}-{col}";
+//                 currentChar = data[row][col].ToString();
+//                 // Up
+//                 if (row > 0)
+//                 {
+//                     nextNode = $"{row - 1}-{col}";
+//                     nextChar = data[row - 1][col].ToString();
+//                     if (AllowedChars(currentChar).Contains(nextChar))
+//                         graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
+//                 }
+//                 // Down
+//                 if (row < data.Length - 1)
+//                 {
+//                     nextNode = $"{row + 1}-{col}";
+//                     nextChar = data[row + 1][col].ToString();
+//                     if (AllowedChars(currentChar).Contains(nextChar))
+//                         graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
+//                 }
+//                 // Left
+//                 if (col > 0)
+//                 {
+//                     nextNode = $"{row}-{col - 1}";
+//                     nextChar = data[row][col - 1].ToString();
+//                     if (AllowedChars(currentChar).Contains(nextChar))
+//                         graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
+//                 }
+//                 // Right
+//                 if (col < data[0].Count() - 1)
+//                 {
+//                     nextNode = $"{row}-{col + 1}";
+//                     nextChar = data[row][col + 1].ToString();
+//                     if (AllowedChars(currentChar).Contains(nextChar))
+//                         graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
+//                 }
+//             }
+//         return graph;
+//     }
 
-    public static string[] AllowedChars(string current)
-    {
-        if (current == "S") return new string[] { "a" };
-        if (current == "z") return new string[] { "E" };
-        if (current == "E") return new string[] { };
-        string letters = "SabcdefghijklmnopqrstuvwxyzE";
-        int index = letters.IndexOf(current);
-        if (index == -1) throw new System.ArgumentOutOfRangeException($"{current} not in {letters}");
-        return new string[] { letters[index - 1].ToString(),
-                              current,
-                              letters[index + 1].ToString() };
-    }
-}
+//     public static string[] AllowedChars(string current)
+//     {
+//         if (current == "S") return new string[] { "a" };
+//         if (current == "E") return new string[] { "z" };
+//         string letters = "SabcdefghijklmnopqrstuvwxyzE";
+//         int index = letters.IndexOf(current);
+//         if (index == -1) throw new System.ArgumentOutOfRangeException($"{current} not in {letters}");
+//         return new string[] { letters[index - 1].ToString(),
+//                               letters[index].ToString(),
+//                               letters[index + 1].ToString() };
+//     }
+// }
 
 public static class Day11
 {
