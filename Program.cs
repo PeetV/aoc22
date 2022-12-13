@@ -1,101 +1,98 @@
 ﻿using System.Linq;
 
-// Day12.Solution();
+using CsML.Graph;
 
-// public static class Day12
-// {
-//     public static void Solution()
-//     {
-//         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-//         Console.WriteLine("Advent of Code 2022 Day 12");
-//         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-//         Console.WriteLine($"Part 1: {Part1()}");
-//         Console.WriteLine($"Part 2: {Part2()}");
-//         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-//     }
+Day12.Solution();
 
-//     public static int Part1()
-//     {
-//         Graph<string> graph = BuildGraph();
-//         // Console.WriteLine($"Node {nodeOfInterest}={graph.nodes[nodeOfInterest]}.");
-//         (double shortest, string[] path) = graph.ShortestPathDijkstra("20-0", "20-52");
-//         // string[] walked = graph.WalkDepthFirst("20-0", includeBacktrack: false);
-//         // string nodeCheck = "20-52";
-//         // Console.WriteLine($"{nodeCheck} found in walk is {walked.Contains(nodeCheck)}");
-//         // return 0;
-//         return (int)shortest;
-//     }
+public static class Day12
+{
+    public static void Solution()
+    {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine("Advent of Code 2022 Day 12");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Part1()}");
+        Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
 
-//     public static int Part2()
-//     {
-//         return 0;
-//     }
+    public static int Part1()
+    {
+        Graph<string> graph = BuildGraph();
+        (double shortest, string[] path) = graph.ShortestPathDijkstra("20-0", "20-52");
+        return (int)shortest;
+    }
 
-//     public static Graph<string> BuildGraph()
-//     {
-//         Graph<string> graph = new();
-//         string[] data = File.ReadLines("Data/day12.txt")
-//                             .Select(x => x.Trim())
-//                             .ToArray();
-//         // Add nodes
-//         for (int row = 0; row < data.Length; row++)
-//             for (int col = 0; col < data[0].Count(); col++)
-//                 graph.AddNode($"{row}-{col}");
-//         // Add edges
-//         string currentNode, nextNode, currentChar, nextChar;
-//         for (int row = 0; row < data.Length; row++)
-//             for (int col = 0; col < data[0].Count(); col++)
-//             {
-//                 currentNode = $"{row}-{col}";
-//                 currentChar = data[row][col].ToString();
-//                 // Up
-//                 if (row > 0)
-//                 {
-//                     nextNode = $"{row - 1}-{col}";
-//                     nextChar = data[row - 1][col].ToString();
-//                     if (AllowedChars(currentChar).Contains(nextChar))
-//                         graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
-//                 }
-//                 // Down
-//                 if (row < data.Length - 1)
-//                 {
-//                     nextNode = $"{row + 1}-{col}";
-//                     nextChar = data[row + 1][col].ToString();
-//                     if (AllowedChars(currentChar).Contains(nextChar))
-//                         graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
-//                 }
-//                 // Left
-//                 if (col > 0)
-//                 {
-//                     nextNode = $"{row}-{col - 1}";
-//                     nextChar = data[row][col - 1].ToString();
-//                     if (AllowedChars(currentChar).Contains(nextChar))
-//                         graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
-//                 }
-//                 // Right
-//                 if (col < data[0].Count() - 1)
-//                 {
-//                     nextNode = $"{row}-{col + 1}";
-//                     nextChar = data[row][col + 1].ToString();
-//                     if (AllowedChars(currentChar).Contains(nextChar))
-//                         graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
-//                 }
-//             }
-//         return graph;
-//     }
+    public static int Part2()
+    {
+        return 0;
+    }
 
-//     public static string[] AllowedChars(string current)
-//     {
-//         if (current == "S") return new string[] { "a" };
-//         if (current == "E") return new string[] { "z" };
-//         string letters = "SabcdefghijklmnopqrstuvwxyzE";
-//         int index = letters.IndexOf(current);
-//         if (index == -1) throw new System.ArgumentOutOfRangeException($"{current} not in {letters}");
-//         return new string[] { letters[index - 1].ToString(),
-//                               letters[index].ToString(),
-//                               letters[index + 1].ToString() };
-//     }
-// }
+    public static Graph<string> BuildGraph()
+    {
+        Graph<string> graph = new();
+        string[] data = File.ReadLines("Data/day12.txt")
+                            .Select(x => x.Trim())
+                            .ToArray();
+        // Add nodes
+        for (int row = 0; row < data.Length; row++)
+            for (int col = 0; col < data[0].Count(); col++)
+                graph.AddNode($"{row}-{col}");
+        // Add edges
+        string currentNode, nextNode, currentChar, nextChar;
+        for (int row = 0; row < data.Length; row++)
+            for (int col = 0; col < data[0].Count(); col++)
+            {
+                currentNode = $"{row}-{col}";
+                currentChar = data[row][col].ToString();
+                // Up
+                if (row > 0)
+                {
+                    nextNode = $"{row - 1}-{col}";
+                    nextChar = data[row - 1][col].ToString();
+                    if (AllowedChars(currentChar).Contains(nextChar))
+                        graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
+                }
+                // Down
+                if (row < data.Length - 1)
+                {
+                    nextNode = $"{row + 1}-{col}";
+                    nextChar = data[row + 1][col].ToString();
+                    if (AllowedChars(currentChar).Contains(nextChar))
+                        graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
+                }
+                // Left
+                if (col > 0)
+                {
+                    nextNode = $"{row}-{col - 1}";
+                    nextChar = data[row][col - 1].ToString();
+                    if (AllowedChars(currentChar).Contains(nextChar))
+                        graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
+                }
+                // Right
+                if (col < data[0].Count() - 1)
+                {
+                    nextNode = $"{row}-{col + 1}";
+                    nextChar = data[row][col + 1].ToString();
+                    if (AllowedChars(currentChar).Contains(nextChar))
+                        graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
+                }
+            }
+        return graph;
+    }
+
+    public static string[] AllowedChars(string current)
+    {
+        if (current == "S") return new string[] { "a" };
+        if (current == "E") return new string[] { "z" };
+        string letters = "SabcdefghijklmnopqrstuvwxyzE";
+        int index = letters.IndexOf(current);
+        if (index == -1) throw new System.ArgumentOutOfRangeException($"{current} not in {letters}");
+        return new string[] { letters[index - 1].ToString(),
+                                  letters[index].ToString(),
+                                  letters[index + 1].ToString() };
+    }
+}
 
 public static class Day11
 {
