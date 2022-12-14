@@ -18,13 +18,21 @@ public static class Day13
 
     public static int Part1()
     {
-        List<(int[], int[])> pairs = GetData();
-        // foreach (var pair in pairs)
-        // {
-        //     Console.WriteLine(string.Join(",", pair.Item1));
-        //     Console.WriteLine(string.Join(",", pair.Item2));
-        // }
-        return pairs.Select(x => ProcessPair(x)).Sum();
+        (int[], int[])[] pairs = GetData()[0..1];
+        foreach (var pair in pairs)
+        {
+            Console.WriteLine(string.Join(",", pair.Item1));
+            Console.WriteLine(string.Join(",", pair.Item2));
+        }
+        int total = 0, check;
+        for (int i = 0; i < pairs.Length; i++)
+        {
+            check = ProcessPair(pairs[i]);
+            if (check != 1)
+                total += i;
+        }
+        return total;
+        // return pairs.Select(x => ProcessPair(x)).Sum();
     }
 
     public static int Part2()
@@ -34,24 +42,16 @@ public static class Day13
 
     private static int ProcessPair((int[], int[]) input)
     {
-        if (input.Item1.Length == 0 & input.Item2.Length == 0)
-            return 0;
-        if (input.Item1.Length == 0 & input.Item2.Length > 0)
-            return 1;
-        for (int lefti = 0; lefti < input.Item1.Length; lefti++)
-        {
-            if (lefti > input.Item2.Length - 1)
-                return 0;
-            if (lefti == input.Item1.Length - 1 & lefti < input.Item2.Length - 1)
-                return 1;
-            if (input.Item1[lefti] < input.Item2[lefti])
-                return 1;
-            else return 0;
-        }
+
+        bool leftless = input.Item1.Zip(input.Item2).Any(x => x.First < x.Second);
+        if (leftless) return 1;
+        bool rightMore = input.Item2.Zip(input.Item1).Any(x => x.First < x.Second);
+        if (rightMore) return 0;
+        if (input.Item1.Length < input.Item2.Length) return 1;
         return 0;
     }
 
-    public static List<(int[], int[])> GetData()
+    public static (int[], int[])[] GetData()
     {
         List<(int[], int[])> result = new();
         string[] data = File.ReadLines("Data/day13.txt")
@@ -70,7 +70,7 @@ public static class Day13
                             StringToList(data[i - 0])));
             }
         }
-        return result;
+        return result.ToArray();
     }
 
     private static int[] StringToList(string input)
