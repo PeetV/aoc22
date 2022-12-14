@@ -2,7 +2,89 @@
 
 using CsML.Graph;
 
-Day12.Solution();
+Day13.Solution();
+
+public static class Day13
+{
+    public static void Solution()
+    {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine("Advent of Code 2022 Day 13");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Part1()}");
+        Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    public static int Part1()
+    {
+        List<(int[], int[])> pairs = GetData();
+        // foreach (var pair in pairs)
+        // {
+        //     Console.WriteLine(string.Join(",", pair.Item1));
+        //     Console.WriteLine(string.Join(",", pair.Item2));
+        // }
+        return pairs.Select(x => ProcessPair(x)).Sum();
+    }
+
+    public static int Part2()
+    {
+        return 0;
+    }
+
+    private static int ProcessPair((int[], int[]) input)
+    {
+        if (input.Item1.Length == 0 & input.Item2.Length == 0)
+            return 0;
+        if (input.Item1.Length == 0 & input.Item2.Length > 0)
+            return 1;
+        for (int lefti = 0; lefti < input.Item1.Length; lefti++)
+        {
+            if (lefti > input.Item2.Length - 1)
+                return 0;
+            if (lefti == input.Item1.Length - 1 & lefti < input.Item2.Length - 1)
+                return 1;
+            if (input.Item1[lefti] < input.Item2[lefti])
+                return 1;
+            else return 0;
+        }
+        return 0;
+    }
+
+    public static List<(int[], int[])> GetData()
+    {
+        List<(int[], int[])> result = new();
+        string[] data = File.ReadLines("Data/day13.txt")
+                            .Select(x => x.Trim())
+                            .ToArray();
+        for (int i = 0; i < data.Length; i++)
+        {
+            if (data[i] == "")
+            {
+                result.Add((StringToList(data[i - 2]),
+                            StringToList(data[i - 1])));
+            }
+            if (i == data.Length - 1)
+            {
+                result.Add((StringToList(data[i - 1]),
+                            StringToList(data[i - 0])));
+            }
+        }
+        return result;
+    }
+
+    private static int[] StringToList(string input)
+    {
+        List<int> result = new();
+        for (int i = 0; i < input.Count(); i++)
+        {
+            if ("[], ".Contains(input[i])) continue;
+            result.Add(Convert.ToInt32(input[i] - '0'));
+        }
+        return result.ToArray();
+    }
+
+}
 
 public static class Day12
 {
@@ -44,7 +126,6 @@ public static class Day12
         Parallel.For(0, candidates.Count(), x =>
         {
             currentNode = candidates[x];
-            // Console.WriteLine($"{currentNode}");
             (shortest, _) = graph.ShortestPathDijkstra(currentNode, "20-52");
             results[x] = (int)shortest;
         });
