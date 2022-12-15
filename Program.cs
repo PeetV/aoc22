@@ -3,7 +3,62 @@
 using CsML.Extensions;
 using CsML.Graph;
 
-Day13.Solution();
+Day14.Solution();
+
+public static class Day14
+{
+    public static void Solution()
+    {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine("Advent of Code 2022 Day 14");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Part1()}");
+        Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    public static int Part1()
+    {
+        var lines = GetLines();
+        // foreach (var line in lines) Console.WriteLine(line.Delimited());
+        return 0;
+    }
+
+    public static int Part2()
+    { return 0; }
+
+    // TODO: finish this function
+    public static (int, int, int, int) GetDimensions(List<(int, int)[]> lines)
+    {
+        int minX = 0, maxX = 0, minY = 0, maxY = 0;
+        return (minX, maxX, minY, maxY);
+    }
+
+    public static List<(int, int)[]> GetLines()
+    {
+        List<(int, int)[]> result = new();
+        string[] data = File.ReadLines("Data/day14.txt")
+                            .Select(x => x.Trim())
+                            .ToArray();
+        string[] stringPoints;
+        int[] point;
+        List<(int, int)> buffer;
+        foreach (string line in data)
+        {
+            buffer = new();
+            stringPoints = line.Split(" -> ");
+            foreach (string stringPoint in stringPoints)
+            {
+                point = stringPoint.Split(",")
+                                   .Select(x => Convert.ToInt32(x))
+                                   .ToArray();
+                buffer.Add((point[0], point[1]));
+            }
+            result.Add(buffer.ToArray());
+        }
+        return result;
+    }
+}
 
 public static class Day13
 {
@@ -19,19 +74,39 @@ public static class Day13
 
     public static int Part1()
     {
-        (int[], int[])[] pairs = GetData()[2..3];
-        foreach (var pair in pairs)
-        {
-            Console.WriteLine(pair.Item1.Delimited());
-            Console.WriteLine(pair.Item2.Delimited());
-        }
+        // int[] p1 = { 1, 1, 3, 1, 1 };
+        // int[] p2 = { 1, 1, 5, 1, 1 };
+        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
+        // p1 = new int[] { 1, 2, 3, 4 };
+        // p2 = new int[] { 1, 4 };
+        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
+        // p1 = new int[] { 9 };
+        // p2 = new int[] { 8, 7, 6 };
+        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
+        // p1 = new int[] { 4, 4, 4, 4 };
+        // p2 = new int[] { 4, 4, 4, 4, 4 };
+        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
+        // p1 = new int[] { 7, 7, 7, 7 };
+        // p2 = new int[] { 7, 7, 7 };
+        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
+        // p1 = new int[] { };
+        // p2 = new int[] { 3 };
+        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
+        // p1 = new int[] { };
+        // p2 = new int[] { };
+        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
+        // p1 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        // p2 = new int[] { 1, 2, 3, 4, 5, 6, 0, 8, 9 };
+        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
+        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
+        // return 0;
+        (int[], int[])[] pairs = GetData();
         int total = 0;
         for (int i = 0; i < pairs.Length; i++)
         {
             if (ProcessPair(pairs[i]) == 1)
             {
                 total += i + 1;
-                Console.WriteLine($"index {i} total {total}");
             }
         }
         return total;
