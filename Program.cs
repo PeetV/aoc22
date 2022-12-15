@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 
+using CsML.Extensions;
 using CsML.Graph;
 
 Day13.Solution();
@@ -18,21 +19,22 @@ public static class Day13
 
     public static int Part1()
     {
-        (int[], int[])[] pairs = GetData()[0..1];
+        (int[], int[])[] pairs = GetData()[2..3];
         foreach (var pair in pairs)
         {
-            Console.WriteLine(string.Join(",", pair.Item1));
-            Console.WriteLine(string.Join(",", pair.Item2));
+            Console.WriteLine(pair.Item1.Delimited());
+            Console.WriteLine(pair.Item2.Delimited());
         }
-        int total = 0, check;
+        int total = 0;
         for (int i = 0; i < pairs.Length; i++)
         {
-            check = ProcessPair(pairs[i]);
-            if (check != 1)
-                total += i;
+            if (ProcessPair(pairs[i]) == 1)
+            {
+                total += i + 1;
+                Console.WriteLine($"index {i} total {total}");
+            }
         }
         return total;
-        // return pairs.Select(x => ProcessPair(x)).Sum();
     }
 
     public static int Part2()
@@ -42,12 +44,13 @@ public static class Day13
 
     private static int ProcessPair((int[], int[]) input)
     {
-
-        bool leftless = input.Item1.Zip(input.Item2).Any(x => x.First < x.Second);
-        if (leftless) return 1;
-        bool rightMore = input.Item2.Zip(input.Item1).Any(x => x.First < x.Second);
-        if (rightMore) return 0;
-        if (input.Item1.Length < input.Item2.Length) return 1;
+        var zipped = input.Item1.Zip(input.Item2);
+        if (input.Item1.Length == input.Item2.Length)
+            return zipped.Any(x => x.First < x.Second) ? 1 : 0;
+        if (zipped.All(x => x.First == x.Second))
+            return input.Item1.Length < input.Item2.Length ? 1 : 0;
+        if (zipped.Any(x => x.First < x.Second))
+            return 1;
         return 0;
     }
 
