@@ -3,7 +3,55 @@
 using CsML.Extensions;
 using CsML.Graph;
 
-Day14.Solution();
+Day16.Solution();
+
+public static class Day16
+{
+    public static void Solution()
+    {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine("Advent of Code 2022 Day 16");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Part1()}");
+        Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    public static int Part1()
+    {
+        return 0;
+    }
+
+    public static int Part2()
+    {
+        return 0;
+    }
+
+}
+
+public static class Day15
+{
+    public static void Solution()
+    {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine("Advent of Code 2022 Day 15");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Part1()}");
+        Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    public static int Part1()
+    {
+        return 0;
+    }
+
+    public static int Part2()
+    {
+        return 0;
+    }
+
+}
 
 public static class Day14
 {
