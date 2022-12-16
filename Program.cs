@@ -20,21 +20,121 @@ public static class Day14
     public static int Part1()
     {
         List<(int, int)[]> lines = GetLines();
-        foreach (var line in lines) Console.WriteLine(line.Delimited());
-        // Console.WriteLine(GetDimensions(lines));
         (int minX, int maxX, int minY, int maxY) = GetDimensions(lines);
         int width = maxX - minX + 1;
         int height = maxY - minY + 1;
-        // Console.WriteLine($"Matrix with width {width} and height {height}");
         int[,] matrix = new int[height, width];
-        // AddRock(matrix, new (int, int)[] { (498, 4) }, minX, minY);
         foreach (var line in lines) AddRock(matrix, line, minX, minY);
-        PrintMatrix(matrix);
-        return 0;
+        int result = CountSandPart1(matrix, minX, maxY);
+        return result;
     }
 
     public static int Part2()
-    { return 0; }
+    {
+        List<(int, int)[]> lines = GetLines();
+        (int minX, int maxX, int minY, int maxY) = GetDimensions(lines);
+        minX = 0;
+        maxX += 500;
+        maxY += 2;
+        int width = maxX - minX + 1;
+        int height = maxY - minY + 1;
+        int[,] matrix = new int[height, width];
+        lines.Add(new (int, int)[] { (minX, maxY), (maxX, maxY) });
+        foreach (var line in lines) AddRock(matrix, line, minX, minY);
+        int result = CountSandPart2(matrix, minX, maxY);
+        return result;
+    }
+
+    public static int CountSandPart2(int[,] matrix, int minX, int maxY)
+    {
+        int atRest = 0;
+        bool flowingOut = false, grainMoving;
+        int x, y, nextY, downVal, downLeftVal, downRightVal;
+        while (!flowingOut)
+        {
+            x = 500 - minX;
+            y = 0;
+            grainMoving = true;
+            while (grainMoving)
+            {
+                nextY = y + 1;
+                downVal = matrix[nextY, x];
+                if (downVal == 0) { y++; continue; }
+                if (downVal != 0)
+                {
+                    downLeftVal = matrix[nextY, x - 1];
+                    if (downLeftVal == 0)
+                    {
+                        x = x - 1;
+                        y = nextY;
+                        continue;
+                    }
+                    downRightVal = matrix[nextY, x + 1];
+                    if (downRightVal == 0)
+                    {
+                        x = x + 1;
+                        y = nextY;
+                        continue;
+                    }
+                    matrix[y, x] = 2;
+                    atRest += 1;
+                    grainMoving = false;
+                }
+            }
+            if ((x == 500 - minX) & y == 0) flowingOut = true;
+        }
+        return atRest;
+    }
+
+    public static int CountSandPart1(int[,] matrix, int minX, int maxY)
+    {
+        int atRest = 0;
+        bool flowingOut = false, grainMoving;
+        int x, y, nextY, downVal, downLeftVal, downRightVal;
+        while (!flowingOut)
+        {
+            x = 500 - minX;
+            y = 0;
+            grainMoving = true;
+            while (grainMoving)
+            {
+                nextY = y + 1;
+                if (y > maxY | nextY > maxY)
+                {
+                    flowingOut = true;
+                    break;
+                }
+                downVal = matrix[nextY, x];
+                if (downVal == 0) { y++; continue; }
+                if (downVal != 0)
+                {
+                    if ((x - 1) < 0 | (x > matrix.GetLength(1)))
+                    {
+                        flowingOut = true;
+                        break;
+                    }
+                    downLeftVal = matrix[nextY, x - 1];
+                    if (downLeftVal == 0)
+                    {
+                        x = x - 1;
+                        y = nextY;
+                        continue;
+                    }
+                    downRightVal = matrix[nextY, x + 1];
+                    if (downRightVal == 0)
+                    {
+                        x = x + 1;
+                        y = nextY;
+                        continue;
+                    }
+                    matrix[y, x] = 2;
+                    atRest += 1;
+                    grainMoving = false;
+                }
+            }
+        }
+        return atRest;
+    }
 
     public static void PrintMatrix(int[,] matrix)
     {
@@ -56,23 +156,22 @@ public static class Day14
             (curX, curY) = line[idx];
             matrix[curY - yoffset, curX - xoffset] = 1;
             (nextX, nextY) = line[idx + 1];
-            Console.WriteLine($"from {curX}, {curY} to {nextX}, {nextY}");
             if (curY == nextY)
             {
-                if (curX < nextX)
+                if (curX <= nextX)
                     for (int x = curX; x <= nextX; x++)
                         matrix[curY - yoffset, x - xoffset] = 1;
                 if (curX > nextX)
-                    for (int x = nextX; x >= curX; x--)
+                    for (int x = nextX; x <= curX; x++)
                         matrix[curY - yoffset, x - xoffset] = 1;
             }
             else
             {
-                if (curY < nextY)
+                if (curY <= nextY)
                     for (int y = curY; y <= nextY; y++)
                         matrix[y - yoffset, curX - xoffset] = 1;
                 if (curY > nextY)
-                    for (int y = nextY; y >= curY; y--)
+                    for (int y = nextY; y <= curY; y++)
                         matrix[y - yoffset, curX - xoffset] = 1;
 
             }
@@ -82,16 +181,15 @@ public static class Day14
     public static (int, int, int, int) GetDimensions(List<(int, int)[]> lines)
     {
         int minX = int.MaxValue, maxX = int.MinValue;
-        int minY = int.MaxValue, maxY = int.MinValue;
+        int maxY = int.MinValue;
         foreach (var line in lines)
             foreach ((int xval, int yval) in line)
             {
                 if (xval < minX) minX = xval;
                 if (xval > maxX) maxX = xval;
-                if (yval < minY) minY = yval;
                 if (yval > maxY) maxY = yval;
             }
-        return (minX, maxX, minY, maxY);
+        return (minX, maxX, 0, maxY);
     }
 
     public static List<(int, int)[]> GetLines()
