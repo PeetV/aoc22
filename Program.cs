@@ -19,18 +19,27 @@ public static class Day14
 
     public static int Part1()
     {
-        var lines = GetLines();
+        List<(int, int)[]> lines = GetLines();
         // foreach (var line in lines) Console.WriteLine(line.Delimited());
+        // Console.WriteLine(GetDimensions(lines));
         return 0;
     }
 
     public static int Part2()
     { return 0; }
 
-    // TODO: finish this function
     public static (int, int, int, int) GetDimensions(List<(int, int)[]> lines)
     {
-        int minX = 0, maxX = 0, minY = 0, maxY = 0;
+        int minX = int.MaxValue, maxX = int.MinValue;
+        int minY = int.MaxValue, maxY = int.MinValue;
+        foreach (var line in lines)
+            foreach ((int xval, int yval) in line)
+            {
+                if (xval < minX) minX = xval;
+                if (xval > maxX) maxX = xval;
+                if (yval < minY) minY = yval;
+                if (yval > maxY) maxY = yval;
+            }
         return (minX, maxX, minY, maxY);
     }
 
