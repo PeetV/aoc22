@@ -20,13 +20,64 @@ public static class Day14
     public static int Part1()
     {
         List<(int, int)[]> lines = GetLines();
-        // foreach (var line in lines) Console.WriteLine(line.Delimited());
+        foreach (var line in lines) Console.WriteLine(line.Delimited());
         // Console.WriteLine(GetDimensions(lines));
+        (int minX, int maxX, int minY, int maxY) = GetDimensions(lines);
+        int width = maxX - minX + 1;
+        int height = maxY - minY + 1;
+        // Console.WriteLine($"Matrix with width {width} and height {height}");
+        int[,] matrix = new int[height, width];
+        // AddRock(matrix, new (int, int)[] { (498, 4) }, minX, minY);
+        foreach (var line in lines) AddRock(matrix, line, minX, minY);
+        PrintMatrix(matrix);
         return 0;
     }
 
     public static int Part2()
     { return 0; }
+
+    public static void PrintMatrix(int[,] matrix)
+    {
+        for (int r = 0; r < matrix.GetLength(0); r++)
+        {
+            for (int c = 0; c < matrix.GetLength(1); c++)
+                Console.Write(matrix[r, c]);
+            Console.WriteLine("");
+        }
+    }
+
+    public static void AddRock(int[,] matrix, (int, int)[] line, int xoffset, int yoffset)
+    {
+        if (line.Length == 0) return;
+        if (line.Length == 1) matrix[line[0].Item2 - yoffset, line[0].Item1 - xoffset] = 1;
+        int curX, curY, nextX, nextY;
+        for (int idx = 0; idx < line.Length - 1; idx++)
+        {
+            (curX, curY) = line[idx];
+            matrix[curY - yoffset, curX - xoffset] = 1;
+            (nextX, nextY) = line[idx + 1];
+            Console.WriteLine($"from {curX}, {curY} to {nextX}, {nextY}");
+            if (curY == nextY)
+            {
+                if (curX < nextX)
+                    for (int x = curX; x <= nextX; x++)
+                        matrix[curY - yoffset, x - xoffset] = 1;
+                if (curX > nextX)
+                    for (int x = nextX; x >= curX; x--)
+                        matrix[curY - yoffset, x - xoffset] = 1;
+            }
+            else
+            {
+                if (curY < nextY)
+                    for (int y = curY; y <= nextY; y++)
+                        matrix[y - yoffset, curX - xoffset] = 1;
+                if (curY > nextY)
+                    for (int y = nextY; y >= curY; y--)
+                        matrix[y - yoffset, curX - xoffset] = 1;
+
+            }
+        }
+    }
 
     public static (int, int, int, int) GetDimensions(List<(int, int)[]> lines)
     {
