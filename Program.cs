@@ -19,7 +19,28 @@ public static class Day16
 
     public static int Part1()
     {
-        return 0;
+        (Graph<string> graph, Dictionary<string, int> flows) = BuildGraph();
+        string[] path = graph.WalkDepthFirst("AA");
+        path = new string[] { "AA", "DD", "CC", "BB", "AA", "II", "JJ", "II", "AA", "DD", "EE", "FF", "GG", "HH", "GG", "FF", "EE", "DD", "CC" };
+        List<string> onValves = new();
+        int totalPressure = 0;
+        int mins = 0;
+        foreach (string step in path)
+        {
+            mins++;
+            totalPressure += onValves.Select(x => flows[x]).Sum();
+            if (!onValves.Contains(step) & flows[step] != 0)
+            {
+                onValves.Add(step);
+                mins++;
+            }
+            // if (mins == 30) break;
+            Console.WriteLine($"min {mins} at {step} pressure {totalPressure} open {onValves.Delimited()}");
+        }
+        if (mins < 30)
+            foreach (int i in Enumerable.Range(mins, 30 - mins))
+                totalPressure += onValves.Select(x => flows[x]).Sum();
+        return totalPressure;
     }
 
     public static int Part2()
@@ -27,6 +48,37 @@ public static class Day16
         return 0;
     }
 
+    public static (Graph<string>, Dictionary<string, int>) BuildGraph()
+    {
+        Graph<string> graph = new();
+        Dictionary<string, int> flows = new();
+        string[] data = File.ReadLines("Data/day16.txt")
+                            .Select(x => x.Trim())
+                            .ToArray();
+        List<string> nodes = new();
+        List<(string, string)> edges = new();
+        string[] splits;
+        string nodeName, leadsTo;
+        int offset;
+        foreach (string row in data)
+        {
+            nodeName = row.Substring(6, 2);
+            nodes.Add(nodeName);
+            splits = row.Split("; ");
+            offset = splits[1].Contains("valbes") ? 23 : 22;
+            leadsTo = splits[1].Substring(offset);
+            if (leadsTo.Length == 2) edges.Add((nodeName, leadsTo));
+            else foreach (string itm in leadsTo.Split(", "))
+                    edges.Add((nodeName, itm.Trim()));
+            flows[nodeName] = Convert.ToInt32(splits[0].Substring(23));
+        }
+        // Console.WriteLine(flows.Keys.Zip(flows.Values).Delimited());
+        // Console.WriteLine(nodes.Delimited());
+        // Console.WriteLine(edges.Delimited());
+        graph.AddNodes(nodes.ToArray());
+        graph.UpdateEdges(edges.ToArray(), undirected: true);
+        return (graph, flows);
+    }
 }
 
 public static class Day15
@@ -73,7 +125,9 @@ public static class Day14
         int height = maxY - minY + 1;
         int[,] matrix = new int[height, width];
         foreach (var line in lines) AddRock(matrix, line, minX, minY);
+        // PrintMatrix(matrix);
         int result = CountSandPart1(matrix, minX, maxY);
+        // PrintMatrix(matrix);
         return result;
     }
 
