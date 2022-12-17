@@ -21,25 +21,38 @@ public static class Day16
     {
         (Graph<string> graph, Dictionary<string, int> flows) = BuildGraph();
         string[] path = graph.WalkDepthFirst("AA");
+        Console.WriteLine(path.Delimited());
         path = new string[] { "AA", "DD", "CC", "BB", "AA", "II", "JJ", "II", "AA", "DD", "EE", "FF", "GG", "HH", "GG", "FF", "EE", "DD", "CC" };
+        Console.WriteLine(path.Delimited());
         List<string> onValves = new();
-        int totalPressure = 0;
-        int mins = 0;
-        foreach (string step in path)
+        int totalPressure = 0, pressure;
+        int pathidx = 0;
+        string step = "AA";
+        string[] bigs = graph.nodes.Where(x => flows[x] > 10).ToArray();
+        for (int mins = 1; mins <= 30; mins++)
         {
-            mins++;
-            totalPressure += onValves.Select(x => flows[x]).Sum();
+            pressure = onValves.Select(x => flows[x]).Sum();
+            totalPressure += pressure;
             if (!onValves.Contains(step) & flows[step] != 0)
             {
-                onValves.Add(step);
-                mins++;
+                if (bigs.Contains(step))
+                {
+                    onValves.Add(step);
+                    bigs = bigs.Where(x => x != step).ToArray();
+                    Console.WriteLine($"min {mins} open {step} pressure {pressure}");
+                    continue;
+                }
+                if (bigs.Length == 0)
+                {
+                    onValves.Add(step);
+                    Console.WriteLine($"min {mins} open {step} pressure {pressure}");
+                    continue;
+                }
             }
-            // if (mins == 30) break;
-            Console.WriteLine($"min {mins} at {step} pressure {totalPressure} open {onValves.Delimited()}");
+            if (pathidx < path.Length - 1) pathidx++;
+            step = path[pathidx];
+            Console.WriteLine($"min {mins} move to {step} pressure {pressure} valves open {onValves.Delimited()}");
         }
-        if (mins < 30)
-            foreach (int i in Enumerable.Range(mins, 30 - mins))
-                totalPressure += onValves.Select(x => flows[x]).Sum();
         return totalPressure;
     }
 
@@ -65,7 +78,7 @@ public static class Day16
             nodeName = row.Substring(6, 2);
             nodes.Add(nodeName);
             splits = row.Split("; ");
-            offset = splits[1].Contains("valbes") ? 23 : 22;
+            offset = splits[1].Contains("valves") ? 23 : 22;
             leadsTo = splits[1].Substring(offset);
             if (leadsTo.Length == 2) edges.Add((nodeName, leadsTo));
             else foreach (string itm in leadsTo.Split(", "))
@@ -75,6 +88,7 @@ public static class Day16
         // Console.WriteLine(flows.Keys.Zip(flows.Values).Delimited());
         // Console.WriteLine(nodes.Delimited());
         // Console.WriteLine(edges.Delimited());
+        nodes.Order().Reverse();
         graph.AddNodes(nodes.ToArray());
         graph.UpdateEdges(edges.ToArray(), undirected: true);
         return (graph, flows);
