@@ -20,16 +20,27 @@ public static class Day16
     public static int Part1()
     {
         (Graph<string> graph, Dictionary<string, int> flows) = BuildGraph();
+        string[] path;
         // Console.WriteLine(graph.nodes.Delimited());
-        string[] path = graph.WalkDepthFirst("AA");
-        // (_, string[] path) = graph.ShortestPathDijkstra("AA", "JJ");
-        // Console.WriteLine(path.Delimited());
+        path = graph.WalkDepthFirst("AA", true);
+        Console.WriteLine(path.Delimited());
+        Console.WriteLine(DoPath(path, graph, flows));
         path = new string[] { "AA", "DD", "CC", "BB", "AA", "II", "JJ", "II", "AA", "DD", "EE", "FF", "GG", "HH", "GG", "FF", "EE", "DD", "CC" };
         Console.WriteLine(path.Delimited());
+        return DoPath(path, graph, flows);
+    }
+
+    public static int Part2()
+    {
+        return 0;
+    }
+
+    public static int DoPath(string[] path, Graph<string> graph, Dictionary<string, int> flows)
+    {
         List<string> onValves = new();
         int totalPressure = 0, pressure;
         int pathidx = 0;
-        string step = "AA";
+        string step = path[pathidx];
         string[] bigs = graph.nodes.Where(x => flows[x] > 10).ToArray();
         for (int mins = 1; mins <= 30; mins++)
         {
@@ -56,11 +67,6 @@ public static class Day16
             // Console.WriteLine($"min {mins} move to {step} pressure {pressure} valves open {onValves.Delimited()}");
         }
         return totalPressure;
-    }
-
-    public static int Part2()
-    {
-        return 0;
     }
 
     public static (Graph<string>, Dictionary<string, int>) BuildGraph()
