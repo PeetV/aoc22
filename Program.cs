@@ -20,8 +20,10 @@ public static class Day16
     public static int Part1()
     {
         (Graph<string> graph, Dictionary<string, int> flows) = BuildGraph();
+        // Console.WriteLine(graph.nodes.Delimited());
         string[] path = graph.WalkDepthFirst("AA");
-        Console.WriteLine(path.Delimited());
+        // (_, string[] path) = graph.ShortestPathDijkstra("AA", "JJ");
+        // Console.WriteLine(path.Delimited());
         path = new string[] { "AA", "DD", "CC", "BB", "AA", "II", "JJ", "II", "AA", "DD", "EE", "FF", "GG", "HH", "GG", "FF", "EE", "DD", "CC" };
         Console.WriteLine(path.Delimited());
         List<string> onValves = new();
@@ -39,19 +41,19 @@ public static class Day16
                 {
                     onValves.Add(step);
                     bigs = bigs.Where(x => x != step).ToArray();
-                    Console.WriteLine($"min {mins} open {step} pressure {pressure}");
+                    // Console.WriteLine($"min {mins} open {step} pressure {pressure}");
                     continue;
                 }
                 if (bigs.Length == 0)
                 {
                     onValves.Add(step);
-                    Console.WriteLine($"min {mins} open {step} pressure {pressure}");
+                    // Console.WriteLine($"min {mins} open {step} pressure {pressure}");
                     continue;
                 }
             }
             if (pathidx < path.Length - 1) pathidx++;
             step = path[pathidx];
-            Console.WriteLine($"min {mins} move to {step} pressure {pressure} valves open {onValves.Delimited()}");
+            // Console.WriteLine($"min {mins} move to {step} pressure {pressure} valves open {onValves.Delimited()}");
         }
         return totalPressure;
     }
@@ -88,7 +90,6 @@ public static class Day16
         // Console.WriteLine(flows.Keys.Zip(flows.Values).Delimited());
         // Console.WriteLine(nodes.Delimited());
         // Console.WriteLine(edges.Delimited());
-        nodes.Order().Reverse();
         graph.AddNodes(nodes.ToArray());
         graph.UpdateEdges(edges.ToArray(), undirected: true);
         return (graph, flows);
