@@ -21,10 +21,11 @@ public static class Day16
     {
         (Graph<string> graph, Dictionary<string, int> flows) = BuildGraph();
         string[] path;
-        // Console.WriteLine(graph.nodes.Delimited());
-        path = graph.WalkDepthFirst("AA", true);
+
+        path = Walk(graph, flows, "AA");
         Console.WriteLine(path.Delimited());
         Console.WriteLine(DoPath(path, graph, flows));
+
         path = new string[] { "AA", "DD", "CC", "BB", "AA", "II", "JJ", "II", "AA", "DD", "EE", "FF", "GG", "HH", "GG", "FF", "EE", "DD", "CC" };
         Console.WriteLine(path.Delimited());
         return DoPath(path, graph, flows);
@@ -33,6 +34,49 @@ public static class Day16
     public static int Part2()
     {
         return 0;
+    }
+
+    public static string[] Walk(Graph<string> graph, Dictionary<string, int> flows, string start)
+    {
+        int idx = graph.nodes.IndexOf(start);
+        int maxSearchSteps = 1_000_000;
+        List<int> path = new();
+        bool[] visited = Enumerable.Repeat(false, graph.nodes.Count).ToArray();
+        Stack<int> stack = new();
+        int[] unvisitedNeighbours, neighbours;
+        int newIdx, pathIdx, steps = 0;
+        while (steps <= maxSearchSteps)
+        {
+            // Visit the node
+            path.Add(idx);
+            if (!visited[idx]) visited[idx] = true;
+            // Check the neighbhours
+            neighbours = graph.Neighbours(idx);
+            unvisitedNeighbours = neighbours.Where(x => !visited[x]).ToArray();
+            if (unvisitedNeighbours.Length == 0 & stack.Count == 0)
+                break;
+            // Add unvisited neighbours to the top of stack
+            unvisitedNeighbours = unvisitedNeighbours.OrderByDescending(x => flows[graph.nodes[x]]).ToArray();
+            foreach (int val in unvisitedNeighbours)
+                if (!stack.Contains(val)) stack.Push(val);
+            // Visit the top of the stack 
+            newIdx = stack.Pop();
+            // If not possible to visit the top of the stack backtrack
+            if (!neighbours.Contains(newIdx))
+            {
+                pathIdx = path.Count - 1;
+                while (pathIdx > 0)
+                {
+                    pathIdx--;
+                    path.Add(path[pathIdx]);
+                    if (graph.Neighbours(path[pathIdx]).Contains(newIdx))
+                        break;
+                }
+            }
+            idx = newIdx;
+            steps++;
+        }
+        return path.Select(x => graph.nodes[x]).ToArray();
     }
 
     public static int DoPath(string[] path, Graph<string> graph, Dictionary<string, int> flows)
