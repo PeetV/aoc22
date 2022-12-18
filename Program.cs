@@ -56,20 +56,25 @@ public static class Day18
 
     public static int Part2()
     {
+        // Get data
         string[] data = File.ReadLines("Data/day18.txt")
                             .Select(x => x.Trim())
                             .ToArray();
+        // Convert data to 3d points
         (int, int, int)[] points = data
                 .Select(x => x.Split(","))
                 .Select(x => (Convert.ToInt32(x[0]), Convert.ToInt32(x[1]), Convert.ToInt32(x[2])))
                 .ToArray();
+        // Get space dimension and create a 3d matrix
         int maxX = points.Select(x => x.Item1).Max();
         int maxY = points.Select(x => x.Item2).Max();
         int maxZ = points.Select(x => x.Item3).Max();
         int[,,] space = new int[maxZ + 2, maxY + 2, maxX + 2];
-        int surface = 0, inner = 0;
+        int surface = 0;
+        // Fill space with rock locations
         foreach (var point in points)
             space[point.Item3, point.Item2, point.Item1] = 1;
+        // Count the outside surfaces
         for (int z = 0; z <= maxZ; z++)
             for (int y = 0; y <= maxY; y++)
                 for (int x = 0; x <= maxX; x++)
@@ -88,23 +93,94 @@ public static class Day18
                     else if (space[z, y, x - 1] == 0) surface++;
                     if (space[z, y, x + 1] == 0) surface++;
                 }
+        // Create a graph to find locations water cannot reach
+        Graph<string> graph = new();
+        List<string> nodes = new();
+        for (int z = 0; z <= maxZ + 3; z++)
+            for (int y = 0; y <= maxY + 3; y++)
+                for (int x = 0; x <= maxX + 3; x++)
+                    nodes.Add($"{z}-{y}-{x}");
+        graph.AddNodes(nodes.ToArray());
+        // Console.WriteLine(graph.nodes.Delimited());
+        string currentNode, nextNode;
         for (int z = 0; z <= maxZ; z++)
             for (int y = 0; y <= maxY; y++)
                 for (int x = 0; x <= maxX; x++)
                 {
-                    if (space[z, y, x] != 0) continue;
-                    if (z == 0 | y == 0 | x == 0) continue;
-                    if (space[z - 1, y, x] == 1 &
-                        space[z + 1, y, x] == 1 &
-                        space[z, y - 1, x] == 1 &
-                        space[z, y + 1, x] == 1 &
-                        space[z, y, x - 1] == 1 &
-                        space[z, y, x + 1] == 1)
-                        inner += 6;
+                    if (space[z, y, x] == 1) continue;
+                    currentNode = $"{z}-{y}-{x}";
+                    if (z != 0)
+                        if (space[z - 1, y, x] == 0)
+                        {
+                            nextNode = $"{z - 1}-{y}-{x}";
+                            graph.UpdateEdge(currentNode, nextNode, undirected: true);
+                        }
+                    if (space[z + 1, y, x] == 0)
+                    {
+                        nextNode = $"{z + 1}-{y}-{x}";
+                        graph.UpdateEdge(currentNode, nextNode, undirected: true);
+                    }
+                    if (y != 0)
+                        if (space[z, y - 1, x] == 0)
+                        {
+                            nextNode = $"{z}-{y - 1}-{x}";
+                            graph.UpdateEdge(currentNode, nextNode, undirected: true);
+                        }
+                    if (space[z, y + 1, x] == 0)
+                    {
+                        nextNode = $"{z}-{y + 1}-{x}";
+                        graph.UpdateEdge(currentNode, nextNode, undirected: true);
+                    }
+                    if (x != 0)
+                        if (space[z, y, x - 1] == 0)
+                        {
+                            nextNode = $"{z}-{y}-{x - 1}";
+                            graph.UpdateEdge(currentNode, nextNode, undirected: true);
+                        }
+                    if (space[z, y, x + 1] == 0)
+                    {
+                        nextNode = $"{z}-{y}-{x + 1}";
+                        graph.UpdateEdge(currentNode, nextNode, undirected: true);
+                    }
                 }
+        // Find the first water location
+        string firstWater = "0-0-0";
+        // Find all dry nodes
+        string[] waterNodes = graph.WalkDepthFirst(firstWater, includeBacktrack: false);
+        // Console.WriteLine(waterNodes.Delimited());
+        List<string> dryNodes = new();
+        for (int z = 0; z <= maxZ; z++)
+            for (int y = 0; y <= maxY; y++)
+                for (int x = 0; x <= maxX; x++)
+                {
+                    if (space[z, y, x] == 1) continue;
+                    currentNode = $"{z}-{y}-{x}";
+                    if (!waterNodes.Contains(currentNode))
+                        dryNodes.Add(currentNode);
+                }
+        // Console.WriteLine(dryNodes.Delimited(delimiter: "\n"));
+        // Calculate space not reachable by water
+        string[] split;
+        int inner = 0;
+        foreach (string dryNode in dryNodes)
+        {
+            split = dryNode.Split("-");
+            int z = Convert.ToInt32(split[0]);
+            int y = Convert.ToInt32(split[1]);
+            int x = Convert.ToInt32(split[2]);
+
+            if (space[z - 1, y, x] == 1) inner++;
+            if (space[z + 1, y, x] == 1) inner++;
+
+            if (space[z, y - 1, x] == 1) inner++;
+            if (space[z, y + 1, x] == 1) inner++;
+
+            if (space[z, y, x - 1] == 1) inner++;
+            if (space[z, y, x + 1] == 1) inner++;
+        }
+        // Deduct space not reachable by water
         return surface - inner;
     }
-
 }
 
 public static class Day17
