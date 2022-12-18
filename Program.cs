@@ -3,7 +3,133 @@
 using CsML.Extensions;
 using CsML.Graph;
 
-Day16.Solution();
+Day18.Solution();
+
+public static class Day18
+{
+    public static void Solution()
+    {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine("Advent of Code 2022 Day 15");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Part1()}");
+        Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    public static int Part1()
+    {
+        string[] data = File.ReadLines("Data/day18.txt")
+                            .Select(x => x.Trim())
+                            .ToArray();
+        (int, int, int)[] points = data
+                .Select(x => x.Split(","))
+                .Select(x => (Convert.ToInt32(x[0]), Convert.ToInt32(x[1]), Convert.ToInt32(x[2])))
+                .ToArray();
+        int maxX = points.Select(x => x.Item1).Max();
+        int maxY = points.Select(x => x.Item2).Max();
+        int maxZ = points.Select(x => x.Item3).Max();
+        int[,,] space = new int[maxZ + 2, maxY + 2, maxX + 2];
+        int surface = 0;
+        foreach (var point in points)
+            space[point.Item3, point.Item2, point.Item1] = 1;
+        for (int z = 0; z <= maxZ; z++)
+            for (int y = 0; y <= maxY; y++)
+                for (int x = 0; x <= maxX; x++)
+                {
+                    if (space[z, y, x] != 1) continue;
+
+                    if (z == 0) surface++;
+                    else if (space[z - 1, y, x] == 0) surface++;
+                    if (space[z + 1, y, x] == 0) surface++;
+
+                    if (y == 0) surface++;
+                    else if (space[z, y - 1, x] == 0) surface++;
+                    if (space[z, y + 1, x] == 0) surface++;
+
+                    if (x == 0) surface++;
+                    else if (space[z, y, x - 1] == 0) surface++;
+                    if (space[z, y, x + 1] == 0) surface++;
+                }
+        return surface;
+    }
+
+    public static int Part2()
+    {
+        string[] data = File.ReadLines("Data/day18.txt")
+                            .Select(x => x.Trim())
+                            .ToArray();
+        (int, int, int)[] points = data
+                .Select(x => x.Split(","))
+                .Select(x => (Convert.ToInt32(x[0]), Convert.ToInt32(x[1]), Convert.ToInt32(x[2])))
+                .ToArray();
+        int maxX = points.Select(x => x.Item1).Max();
+        int maxY = points.Select(x => x.Item2).Max();
+        int maxZ = points.Select(x => x.Item3).Max();
+        int[,,] space = new int[maxZ + 2, maxY + 2, maxX + 2];
+        int surface = 0, inner = 0;
+        foreach (var point in points)
+            space[point.Item3, point.Item2, point.Item1] = 1;
+        for (int z = 0; z <= maxZ; z++)
+            for (int y = 0; y <= maxY; y++)
+                for (int x = 0; x <= maxX; x++)
+                {
+                    if (space[z, y, x] != 1) continue;
+
+                    if (z == 0) surface++;
+                    else if (space[z - 1, y, x] == 0) surface++;
+                    if (space[z + 1, y, x] == 0) surface++;
+
+                    if (y == 0) surface++;
+                    else if (space[z, y - 1, x] == 0) surface++;
+                    if (space[z, y + 1, x] == 0) surface++;
+
+                    if (x == 0) surface++;
+                    else if (space[z, y, x - 1] == 0) surface++;
+                    if (space[z, y, x + 1] == 0) surface++;
+                }
+        for (int z = 0; z <= maxZ; z++)
+            for (int y = 0; y <= maxY; y++)
+                for (int x = 0; x <= maxX; x++)
+                {
+                    if (space[z, y, x] != 0) continue;
+                    if (z == 0 | y == 0 | x == 0) continue;
+                    if (space[z - 1, y, x] == 1 &
+                        space[z + 1, y, x] == 1 &
+                        space[z, y - 1, x] == 1 &
+                        space[z, y + 1, x] == 1 &
+                        space[z, y, x - 1] == 1 &
+                        space[z, y, x + 1] == 1)
+                        inner += 6;
+                }
+        return surface - inner;
+    }
+
+}
+
+public static class Day17
+{
+    public static void Solution()
+    {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine("Advent of Code 2022 Day 15");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Part1()}");
+        Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    public static int Part1()
+    {
+        return 0;
+    }
+
+    public static int Part2()
+    {
+        return 0;
+    }
+
+}
 
 public static class Day16
 {
