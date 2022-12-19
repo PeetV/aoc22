@@ -12,7 +12,7 @@ public static class Day18
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine("Advent of Code 2022 Day 15");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        Console.WriteLine($"Part 1: {Part1()}");
+        // Console.WriteLine($"Part 1: {Part1()}");
         Console.WriteLine($"Part 2: {Part2()}");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
@@ -143,11 +143,11 @@ public static class Day18
                         graph.UpdateEdge(currentNode, nextNode, undirected: true);
                     }
                 }
-        // Find the first water location
-        string firstWater = "0-0-0";
+
         // Find all dry nodes
+        string firstWater = "0-0-0";
         string[] waterNodes = graph.WalkDepthFirst(firstWater, includeBacktrack: false);
-        // Console.WriteLine(waterNodes.Delimited());
+        // Console.WriteLine(waterNodes.Length);
         List<string> dryNodes = new();
         for (int z = 0; z <= maxZ; z++)
             for (int y = 0; y <= maxY; y++)
@@ -155,8 +155,8 @@ public static class Day18
                 {
                     if (space[z, y, x] == 1) continue;
                     currentNode = $"{z}-{y}-{x}";
-                    if (!waterNodes.Contains(currentNode))
-                        dryNodes.Add(currentNode);
+                    if (waterNodes.Contains(currentNode)) continue;
+                    dryNodes.Add(currentNode);
                 }
         // Console.WriteLine(dryNodes.Delimited(delimiter: "\n"));
         // Calculate space not reachable by water
@@ -171,10 +171,8 @@ public static class Day18
 
             if (space[z - 1, y, x] == 1) inner++;
             if (space[z + 1, y, x] == 1) inner++;
-
             if (space[z, y - 1, x] == 1) inner++;
             if (space[z, y + 1, x] == 1) inner++;
-
             if (space[z, y, x - 1] == 1) inner++;
             if (space[z, y, x + 1] == 1) inner++;
         }
