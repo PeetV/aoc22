@@ -3,7 +3,7 @@
 using CsML.Extensions;
 using CsML.Graph;
 
-Day11.Solution();
+Day13.Solution();
 
 public static class Day18
 {
@@ -599,58 +599,17 @@ public static class Day13
 
     public static int Part1()
     {
-        // int[] p1 = { 1, 1, 3, 1, 1 };
-        // int[] p2 = { 1, 1, 5, 1, 1 };
-        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
-        // p1 = new int[] { 1, 2, 3, 4 };
-        // p2 = new int[] { 1, 4 };
-        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
-        // p1 = new int[] { 9 };
-        // p2 = new int[] { 8, 7, 6 };
-        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
-        // p1 = new int[] { 4, 4, 4, 4 };
-        // p2 = new int[] { 4, 4, 4, 4, 4 };
-        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
-        // p1 = new int[] { 7, 7, 7, 7 };
-        // p2 = new int[] { 7, 7, 7 };
-        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
-        // p1 = new int[] { };
-        // p2 = new int[] { 3 };
-        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
-        // p1 = new int[] { };
-        // p2 = new int[] { };
-        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
-        // p1 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        // p2 = new int[] { 1, 2, 3, 4, 5, 6, 0, 8, 9 };
-        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
-        // Console.WriteLine($"[{p1.Delimited()}], [{p2.Delimited()}]: {ProcessPair((p1, p2))}");
-        // return 0;
-        (int[], int[])[] pairs = GetData();
-        int total = 0;
-        for (int i = 0; i < pairs.Length; i++)
-        {
-            if (ProcessPair(pairs[i]) == 1)
-            {
-                total += i + 1;
-            }
-        }
-        return total;
+        return 0;
     }
 
     public static int Part2()
     {
-        return 0;
-    }
-
-    private static int ProcessPair((int[], int[]) input)
-    {
-        var zipped = input.Item1.Zip(input.Item2);
-        if (input.Item1.Length == input.Item2.Length)
-            return zipped.Any(x => x.First < x.Second) ? 1 : 0;
-        if (zipped.All(x => x.First == x.Second))
-            return input.Item1.Length < input.Item2.Length ? 1 : 0;
-        if (zipped.Any(x => x.First < x.Second))
-            return 1;
+        (int[], int[])[] data = GetData();
+        foreach (var itm in data)
+        {
+            Console.WriteLine(itm.Item1.Delimited());
+            Console.WriteLine(itm.Item2.Delimited());
+        }
         return 0;
     }
 
@@ -660,17 +619,18 @@ public static class Day13
         string[] data = File.ReadLines("Data/day13.txt")
                             .Select(x => x.Trim())
                             .ToArray();
-        for (int i = 0; i < data.Length; i++)
+        List<string> batch = new();
+        string line;
+        for (int idx = 0; idx < data.Length; idx++)
         {
-            if (data[i] == "")
+            line = data[idx];
+            if (line != "") batch.Add(line);
+            if (line == "" | idx == data.Length - 1)
             {
-                result.Add((StringToList(data[i - 2]),
-                            StringToList(data[i - 1])));
-            }
-            if (i == data.Length - 1)
-            {
-                result.Add((StringToList(data[i - 1]),
-                            StringToList(data[i - 0])));
+                result.Add((StringToList(batch[0]),
+                            StringToList(batch[1])));
+                batch.Clear();
+                continue;
             }
         }
         return result.ToArray();
