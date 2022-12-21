@@ -3,7 +3,7 @@
 using CsML.Extensions;
 using CsML.Graph;
 
-Day18.Solution();
+Day11.Solution();
 
 public static class Day18
 {
@@ -826,24 +826,25 @@ public static class Day11
         return counts[0] * counts[1];
     }
 
-    public static int Part2()
+    public static long Part2()
     {
         List<Monkey> monkeys = GetMonkeys();
-        int rounds = 20;
+        long mod = monkeys.Select(x => x.divisibleBy).Product();
+        int rounds = 10_000;
         for (int r = 0; r < rounds; r++)
         {
-            foreach (var monkey in monkeys) monkey.PlayRoundPart2(monkeys);
+            foreach (var monkey in monkeys) monkey.PlayRoundPart2(monkeys, mod);
         }
-        foreach (var monkey in monkeys) Console.WriteLine(monkey);
-        int[] counts = monkeys.Select(x => x.inspectionCount).ToArray();
+        // foreach (var monkey in monkeys) Console.WriteLine(monkey);
+        long[] counts = monkeys.Select(x => (long)x.inspectionCount).ToArray();
         counts = counts.OrderByDescending(x => x).ToArray();
         return counts[0] * counts[1];
     }
 
     public class Monkey
     {
-        public List<int> items;
-        public Func<int, int> operation = x => x;
+        public List<long> items;
+        public Func<long, long> operation = x => x;
         public string operationString;
         public int divisibleBy;
         public int monkeyOnTrue;
@@ -852,14 +853,14 @@ public static class Day11
         public int inspectionCount;
 
         public Monkey(
-            int[] items,
+            long[] items,
             string operationString,
             int divisibleBy,
             int monkeyOnTrue,
             int monkeyOnFalse
         )
         {
-            this.items = new List<int>(items);
+            this.items = new List<long>(items);
             this.operationString = operationString;
             this.divisibleBy = divisibleBy;
             this.monkeyOnTrue = monkeyOnTrue;
@@ -896,7 +897,7 @@ public static class Day11
 
         public void PlayRoundPart1(List<Monkey> monkeys)
         {
-            int worry;
+            long worry;
             foreach (int item in items)
             {
                 worry = operation(item);
@@ -909,23 +910,17 @@ public static class Day11
             items.Clear();
         }
 
-        public void PlayRoundPart2(List<Monkey> monkeys)
+        public void PlayRoundPart2(List<Monkey> monkeys, long mod)
         {
-            int worry;
+            long worry;
             foreach (int item in items)
             {
                 worry = operation(item);
                 // worry /= 3;
+                worry %= mod;
                 if ((worry % divisibleBy) == 0)
-                {
-                    worry = 1;
                     monkeys[monkeyOnTrue].items.Add(worry);
-                }
-                else
-                {
-                    worry = worry % divisibleBy;
-                    monkeys[monkeyOnFalse].items.Add(worry);
-                }
+                else monkeys[monkeyOnFalse].items.Add(worry);
                 inspectionCount++;
             }
             items.Clear();
@@ -938,7 +933,7 @@ public static class Day11
                             .Select(x => x.Trim())
                             .ToArray();
         List<Monkey> monkeys = new();
-        int[] items = { };
+        long[] items = { };
         string[] split;
         string line, sub, operationString = "";
         int divisibleBy = 0, monkeyTrue = 0, monkeyFalse = 0;
@@ -953,7 +948,7 @@ public static class Day11
                 else
                     split = sub.Split(",");
                 items = split.Select(x => x.Trim())
-                             .Select(x => Convert.ToInt32(x))
+                             .Select(x => (long)Convert.ToInt32(x))
                              .ToArray();
             }
             if (line.Trim().StartsWith("Operation: new = "))
