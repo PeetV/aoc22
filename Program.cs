@@ -610,6 +610,19 @@ public static class Day13
             Console.WriteLine(itm.Item1.Delimited());
             Console.WriteLine(itm.Item2.Delimited());
         }
+        int[] ordered = data.Select(x => CheckOrder(x)).ToArray();
+        Console.WriteLine();
+        Console.WriteLine(ordered.Delimited());
+        return 0;
+    }
+
+    public static int CheckOrder((int[], int[]) pair)
+    {
+        var zipped = pair.Item1.Zip(pair.Item2);
+        if (pair.Item1.Count() == pair.Item2.Count())
+        {
+            return zipped.Any(x => x.First < x.Second) ? 1 : 0;
+        }
         return 0;
     }
 
@@ -638,6 +651,11 @@ public static class Day13
 
     private static int[] StringToList(string input)
     {
+        string brackets = "[]";
+        if (input.All(x => brackets.Contains(x.ToString())))
+        {
+            return new int[] { input.Select(x => x.ToString() == "[" ? 1 : 0).Sum() };
+        }
         List<int> result = new();
         for (int i = 0; i < input.Count(); i++)
         {
