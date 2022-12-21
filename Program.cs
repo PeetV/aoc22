@@ -601,70 +601,10 @@ public static class Day13
     {
         return 0;
     }
-
     public static int Part2()
     {
-        (int[], int[])[] data = GetData();
-        foreach (var itm in data)
-        {
-            Console.WriteLine(itm.Item1.Delimited());
-            Console.WriteLine(itm.Item2.Delimited());
-        }
-        int[] ordered = data.Select(x => CheckOrder(x)).ToArray();
-        Console.WriteLine();
-        Console.WriteLine(ordered.Delimited());
         return 0;
     }
-
-    public static int CheckOrder((int[], int[]) pair)
-    {
-        var zipped = pair.Item1.Zip(pair.Item2);
-        if (pair.Item1.Count() == pair.Item2.Count())
-        {
-            return zipped.Any(x => x.First < x.Second) ? 1 : 0;
-        }
-        return 0;
-    }
-
-    public static (int[], int[])[] GetData()
-    {
-        List<(int[], int[])> result = new();
-        string[] data = File.ReadLines("Data/day13.txt")
-                            .Select(x => x.Trim())
-                            .ToArray();
-        List<string> batch = new();
-        string line;
-        for (int idx = 0; idx < data.Length; idx++)
-        {
-            line = data[idx];
-            if (line != "") batch.Add(line);
-            if (line == "" | idx == data.Length - 1)
-            {
-                result.Add((StringToList(batch[0]),
-                            StringToList(batch[1])));
-                batch.Clear();
-                continue;
-            }
-        }
-        return result.ToArray();
-    }
-
-    private static int[] StringToList(string input)
-    {
-        string brackets = "[]";
-        if (input.All(x => brackets.Contains(x.ToString())))
-        {
-            return new int[] { input.Select(x => x.ToString() == "[" ? 1 : 0).Sum() };
-        }
-        List<int> result = new();
-        for (int i = 0; i < input.Count(); i++)
-        {
-            if ("[], ".Contains(input[i])) continue;
-            result.Add(Convert.ToInt32(input[i] - '0'));
-        }
-        return result.ToArray();
-    }
-
 }
 
 public static class Day12
