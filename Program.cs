@@ -3,7 +3,70 @@
 using CsML.Extensions;
 using CsML.Graph;
 
-Day20.Solution();
+Day21.Solution();
+
+public static class Day21
+{
+    public static void Solution()
+    {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine("Advent of Code 2022 Day 21");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Part1()}");
+        // Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    public static long Part1()
+    {
+        string[] data = File.ReadLines("Data/day21.txt")
+                            .Select(x => x.Trim())
+                            .ToArray();
+        data = ReplaceNumbers(data);
+        // data = DoOperations(data);
+        foreach (var row in data) Console.WriteLine(row);
+        return 0;
+    }
+
+    public static string[] ReplaceNumbers(string[] data)
+    {
+        List<string> result = new(data);
+        string tail, name;
+        int i;
+        foreach (string row in data)
+        {
+            tail = row.Substring(6);
+            name = row.Substring(0, 4);
+            if (int.TryParse(tail, out i))
+            {
+                for (int r = 0; r < result.Count; r++)
+                {
+                    if (data[r].Substring(0, 4) != name)
+                        result[r] = result[r].Replace(name, $"{i}");
+                }
+                // result.Remove(row);
+            }
+        }
+        return result.ToArray();
+    }
+
+    public static string[] DoOperations(string[] data)
+    {
+        List<string> result = new(data);
+        string tail, name;
+        int i;
+        foreach (string row in data)
+        {
+            tail = row.Substring(6);
+            name = row.Substring(0, 4);
+            if (tail.Contains(" + "))
+            {
+
+            }
+        }
+        return result.ToArray();
+    }
+}
 
 public static class Day20
 {
