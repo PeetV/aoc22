@@ -13,157 +13,87 @@ public static class Day20
         Console.WriteLine("Advent of Code 2022 Day 20");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.WriteLine($"Part 1: {Part1()}");
-        Console.WriteLine($"Part 2: {Part2()}");
+        // Console.WriteLine($"Part 2: {Part2()}");
         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
-    public static int Part1()
+    public static long Part1()
     {
-        List<int> numbers = File.ReadLines("Data/day20.txt")
-                            .Select(x => Convert.ToInt32(x.Trim()))
+        List<long> numbers = File.ReadLines("Data/day20.txt")
+                            .Select(x => Convert.ToInt64(x.Trim()))
                             .ToList();
-        List<int> indeces = Enumerable.Range(0, numbers.Count).ToList();
-        Console.WriteLine(indeces.Zip(numbers).OrderBy(x => x.First).Select(x => x.Second).Delimited());
-
-        int workingNumberIndex = 0;
-        int currentIndex = indeces[workingNumberIndex];
-        int newIndex = currentIndex;
-        int val = numbers[workingNumberIndex];
-        if (val > 0)
-            for (int i = 0; i < val; i++)
-            {
-                newIndex++;
-                if (newIndex > (numbers.Count - 1))
-                    newIndex = 0;
-            }
-        else
-            for (int i = 0; i < Math.Abs(val); i++)
-            {
-                newIndex--;
-                if (newIndex < 0)
-                    newIndex = numbers.Count - 2;
-            }
-        if (newIndex > currentIndex)
+        List<long> lookup = MixPart1(numbers);
+        long onek = 0, twok = 0, threek = 0;
+        int idx = lookup.IndexOf(0);
+        for (int i = 1; i <= 3_000; i++)
         {
-            int[] indecesToUpdate = indeces.Where(x => x > currentIndex & x <= newIndex).ToArray();
-            foreach (int i in indecesToUpdate)
-                indeces[indeces.IndexOf(i)]--;
+            idx++;
+            if (idx == lookup.Count)
+                idx = 0;
+            if (i == 1000) onek = lookup[idx];
+            if (i == 2000) twok = lookup[idx];
+            if (i == 3000) threek = lookup[idx];
         }
-        else
-        {
-            int[] indecesToUpdate = indeces.Where(x => x >= newIndex & x < currentIndex).ToArray();
-            foreach (int i in indecesToUpdate)
-                indeces[indeces.IndexOf(i)]++;
-        }
-        indeces[workingNumberIndex] = newIndex;
-        Console.WriteLine(indeces.Zip(numbers).OrderBy(x => x.First).Select(x => x.Second).Delimited());
-
-        workingNumberIndex = 1;
-        currentIndex = indeces[workingNumberIndex];
-        newIndex = currentIndex;
-        val = numbers[workingNumberIndex];
-        if (val > 0)
-            for (int i = 0; i < val; i++)
-            {
-                newIndex++;
-                if (newIndex > (numbers.Count - 1))
-                    newIndex = 0;
-            }
-        else
-            for (int i = 0; i < Math.Abs(val); i++)
-            {
-                newIndex--;
-                if (newIndex < 0)
-                    newIndex = numbers.Count - 2;
-            }
-        if (newIndex > currentIndex)
-        {
-            int[] indecesToUpdate = indeces.Where(x => x > currentIndex & x <= newIndex).ToArray();
-            foreach (int i in indecesToUpdate)
-                indeces[indeces.IndexOf(i)]--;
-        }
-        else
-        {
-            int[] indecesToUpdate = indeces.Where(x => x >= newIndex & x < currentIndex).ToArray();
-            foreach (int i in indecesToUpdate)
-                indeces[indeces.IndexOf(i)]++;
-        }
-        indeces[workingNumberIndex] = newIndex;
-        Console.WriteLine(indeces.Zip(numbers).OrderBy(x => x.First).Select(x => x.Second).Delimited());
-
-        workingNumberIndex = 2;
-        currentIndex = indeces[workingNumberIndex];
-        newIndex = currentIndex;
-        val = numbers[workingNumberIndex];
-        if (val > 0)
-            for (int i = 0; i < val; i++)
-            {
-                newIndex++;
-                if (newIndex > (numbers.Count - 1))
-                    newIndex = 0;
-            }
-        else
-            for (int i = 0; i < Math.Abs(val); i++)
-            {
-                newIndex--;
-                if (newIndex < 0)
-                    newIndex = numbers.Count - 2;
-            }
-        if (newIndex > currentIndex)
-        {
-            int[] indecesToUpdate = indeces.Where(x => x > currentIndex & x <= newIndex).ToArray();
-            foreach (int i in indecesToUpdate)
-                indeces[indeces.IndexOf(i)]--;
-        }
-        else
-        {
-            int[] indecesToUpdate = indeces.Where(x => x >= newIndex & x < currentIndex).ToArray();
-            foreach (int i in indecesToUpdate)
-                indeces[indeces.IndexOf(i)]++;
-        }
-        indeces[workingNumberIndex] = newIndex;
-        Console.WriteLine(indeces.Zip(numbers).OrderBy(x => x.First).Select(x => x.Second).Delimited());
-
-        workingNumberIndex = 3;
-        currentIndex = indeces[workingNumberIndex];
-        newIndex = currentIndex;
-        val = numbers[workingNumberIndex];
-        if (val > 0)
-            for (int i = 0; i < val; i++)
-            {
-                newIndex++;
-                if (newIndex > (numbers.Count - 1))
-                    newIndex = 0;
-            }
-        else
-            for (int i = 0; i < Math.Abs(val); i++)
-            {
-                newIndex--;
-                if (newIndex < 0)
-                    newIndex = numbers.Count - 2;
-            }
-        if (newIndex > currentIndex)
-        {
-            int[] indecesToUpdate = indeces.Where(x => x > currentIndex & x <= newIndex).ToArray();
-            foreach (int i in indecesToUpdate)
-                indeces[indeces.IndexOf(i)]--;
-        }
-        else
-        {
-            int[] indecesToUpdate = indeces.Where(x => x >= newIndex & x < currentIndex).ToArray();
-            foreach (int i in indecesToUpdate)
-                indeces[indeces.IndexOf(i)]++;
-        }
-        indeces[workingNumberIndex] = newIndex;
-        Console.WriteLine(indeces.Zip(numbers).OrderBy(x => x.First).Select(x => x.Second).Delimited());
-
-
-        return 0;
+        return onek + twok + threek;
     }
 
     public static int Part2()
     {
+        List<long> numbers = File.ReadLines("Data/day20.txt")
+                            .Select(x => Convert.ToInt64(x.Trim()))
+                            .ToList();
+        Console.WriteLine(numbers.Delimited());
+        List<long> lookup = MixPart1(numbers);
+        Console.WriteLine(lookup.Select(x => x * 811589153).Delimited());
         return 0;
+    }
+
+    public static List<long> MixPart1(List<long> numbers)
+    {
+        List<int> indeces = Enumerable.Range(0, numbers.Count).ToList();
+        int currentIndex, newIndex;
+        long val;
+        for (int workingNumberIndex = 0; workingNumberIndex < indeces.Count; workingNumberIndex++)
+        {
+            currentIndex = indeces[workingNumberIndex];
+            newIndex = currentIndex;
+            val = numbers[workingNumberIndex];
+            if (val > 0)
+                for (int i = 0; i < val; i++)
+                {
+                    newIndex++;
+                    if (newIndex > (numbers.Count - 1))
+                        newIndex = 1;
+                }
+            else
+            {
+                for (int i = 0; i < Math.Abs(val); i++)
+                {
+                    newIndex--;
+                    if (newIndex < 0)
+                        newIndex = numbers.Count - 2;
+                }
+                if (newIndex == 0) newIndex = numbers.Count - 1;
+            }
+            if (newIndex > currentIndex)
+            {
+                int[] indecesToUpdate = indeces.Where(x => x > currentIndex & x <= newIndex)
+                                               .Select(x => indeces.IndexOf(x))
+                                               .ToArray();
+                foreach (int i in indecesToUpdate)
+                    indeces[i]--;
+            }
+            else
+            {
+                int[] indecesToUpdate = indeces.Where(x => x >= newIndex & x < currentIndex)
+                                               .Select(x => indeces.IndexOf(x))
+                                               .ToArray();
+                foreach (int i in indecesToUpdate)
+                    indeces[i]++;
+            }
+            indeces[workingNumberIndex] = newIndex;
+        }
+        return indeces.Zip(numbers).OrderBy(x => x.First).Select(x => x.Second).ToList();
     }
 
 }
