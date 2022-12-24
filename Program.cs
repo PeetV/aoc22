@@ -3,7 +3,136 @@
 using CsML.Extensions;
 using CsML.Graph;
 
-Day13.Solution();
+Day20.Solution();
+
+public static class Day20
+{
+    public static void Solution()
+    {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine("Advent of Code 2022 Day 20");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Part1()}");
+        Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    public static int Part1()
+    {
+        List<int> numbers = File.ReadLines("Data/day20.txt")
+                            .Select(x => Convert.ToInt32(x.Trim()))
+                            .ToList();
+        List<int> indeces = Enumerable.Range(0, numbers.Count).ToList();
+        Console.WriteLine(indeces.Select(x => numbers[x]).Delimited());
+
+        int workingNumberIndex = 0;
+        int currentIndex = indeces[workingNumberIndex];
+        int newIndex = currentIndex;
+        int val = numbers[workingNumberIndex];
+        if (val > 0)
+            for (int i = 0; i < val; i++)
+            {
+                newIndex++;
+                if (newIndex > (numbers.Count - 1))
+                    newIndex = 0;
+            }
+        else
+            for (int i = 0; i < Math.Abs(val); i++)
+            {
+                newIndex--;
+                if (newIndex < 0)
+                    newIndex = numbers.Count - 1;
+            }
+        for (int i = newIndex; i >= 0; i--)
+        {
+            indeces[i] -= 1;
+        }
+        indeces[workingNumberIndex] = newIndex;
+        Console.WriteLine(indeces.Select(x => numbers[x]).Delimited());
+
+        workingNumberIndex = 1;
+        currentIndex = indeces[workingNumberIndex];
+        newIndex = currentIndex;
+        val = numbers[workingNumberIndex];
+        if (val > 0)
+            for (int i = 0; i < val; i++)
+            {
+                newIndex++;
+                if (newIndex > (numbers.Count - 1))
+                    newIndex = 0;
+            }
+        else
+            for (int i = 0; i < Math.Abs(val); i++)
+            {
+                newIndex--;
+                if (newIndex < 0)
+                    newIndex = numbers.Count - 1;
+            }
+        for (int i = newIndex; i >= 0; i--)
+        {
+            indeces[i] -= 1;
+        }
+        indeces[workingNumberIndex] = newIndex;
+        Console.WriteLine(indeces.Select(x => numbers[x]).Delimited());
+
+        workingNumberIndex = 2;
+        currentIndex = indeces[workingNumberIndex];
+        newIndex = currentIndex;
+        val = numbers[workingNumberIndex];
+        if (val > 0)
+            for (int i = 0; i < val; i++)
+            {
+                newIndex++;
+                if (newIndex > (numbers.Count - 1))
+                    newIndex = 0;
+            }
+        else
+            for (int i = 0; i < Math.Abs(val); i++)
+            {
+                newIndex--;
+                if (newIndex < 0)
+                    newIndex = numbers.Count - 1;
+            }
+        for (int i = newIndex; i >= 0; i--)
+        {
+            indeces[i] -= 1;
+        }
+        indeces[workingNumberIndex] = newIndex;
+        Console.WriteLine(indeces.Select(x => numbers[x]).Delimited());
+
+        return 0;
+    }
+
+    public static int Part2()
+    {
+        return 0;
+    }
+
+}
+
+public static class Day19
+{
+    public static void Solution()
+    {
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine("Advent of Code 2022 Day 19");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Console.WriteLine($"Part 1: {Part1()}");
+        Console.WriteLine($"Part 2: {Part2()}");
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    public static int Part1()
+    {
+        return 0;
+    }
+
+    public static int Part2()
+    {
+        return 0;
+    }
+
+}
 
 public static class Day18
 {
@@ -676,7 +805,7 @@ public static class Day12
                     nextNode = $"{row - 1}-{col}";
                     nextChar = data[row - 1][col].ToString();
                     if (AllowedChars(currentChar).Contains(nextChar))
-                        graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
+                        graph.UpdateEdge(fromNode: currentNode, toNode: nextNode, undirected: true);
                 }
                 // Down
                 if (row < data.Length - 1)
@@ -684,7 +813,7 @@ public static class Day12
                     nextNode = $"{row + 1}-{col}";
                     nextChar = data[row + 1][col].ToString();
                     if (AllowedChars(currentChar).Contains(nextChar))
-                        graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
+                        graph.UpdateEdge(fromNode: currentNode, toNode: nextNode, undirected: true);
                 }
                 // Left
                 if (col > 0)
@@ -692,7 +821,7 @@ public static class Day12
                     nextNode = $"{row}-{col - 1}";
                     nextChar = data[row][col - 1].ToString();
                     if (AllowedChars(currentChar).Contains(nextChar))
-                        graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
+                        graph.UpdateEdge(fromNode: currentNode, toNode: nextNode, undirected: true);
                 }
                 // Right
                 if (col < data[0].Count() - 1)
@@ -700,7 +829,7 @@ public static class Day12
                     nextNode = $"{row}-{col + 1}";
                     nextChar = data[row][col + 1].ToString();
                     if (AllowedChars(currentChar).Contains(nextChar))
-                        graph.UpdateEdge(from: currentNode, to: nextNode, undirected: true);
+                        graph.UpdateEdge(fromNode: currentNode, toNode: nextNode, undirected: true);
                 }
             }
         return graph;
