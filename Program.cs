@@ -23,7 +23,7 @@ public static class Day20
                             .Select(x => Convert.ToInt32(x.Trim()))
                             .ToList();
         List<int> indeces = Enumerable.Range(0, numbers.Count).ToList();
-        Console.WriteLine(indeces.Select(x => numbers[x]).Delimited());
+        Console.WriteLine(indeces.Zip(numbers).OrderBy(x => x.First).Select(x => x.Second).Delimited());
 
         int workingNumberIndex = 0;
         int currentIndex = indeces[workingNumberIndex];
@@ -41,14 +41,22 @@ public static class Day20
             {
                 newIndex--;
                 if (newIndex < 0)
-                    newIndex = numbers.Count - 1;
+                    newIndex = numbers.Count - 2;
             }
-        for (int i = newIndex; i >= 0; i--)
+        if (newIndex > currentIndex)
         {
-            indeces[i] -= 1;
+            int[] indecesToUpdate = indeces.Where(x => x > currentIndex & x <= newIndex).ToArray();
+            foreach (int i in indecesToUpdate)
+                indeces[indeces.IndexOf(i)]--;
+        }
+        else
+        {
+            int[] indecesToUpdate = indeces.Where(x => x >= newIndex & x < currentIndex).ToArray();
+            foreach (int i in indecesToUpdate)
+                indeces[indeces.IndexOf(i)]++;
         }
         indeces[workingNumberIndex] = newIndex;
-        Console.WriteLine(indeces.Select(x => numbers[x]).Delimited());
+        Console.WriteLine(indeces.Zip(numbers).OrderBy(x => x.First).Select(x => x.Second).Delimited());
 
         workingNumberIndex = 1;
         currentIndex = indeces[workingNumberIndex];
@@ -66,14 +74,22 @@ public static class Day20
             {
                 newIndex--;
                 if (newIndex < 0)
-                    newIndex = numbers.Count - 1;
+                    newIndex = numbers.Count - 2;
             }
-        for (int i = newIndex; i >= 0; i--)
+        if (newIndex > currentIndex)
         {
-            indeces[i] -= 1;
+            int[] indecesToUpdate = indeces.Where(x => x > currentIndex & x <= newIndex).ToArray();
+            foreach (int i in indecesToUpdate)
+                indeces[indeces.IndexOf(i)]--;
+        }
+        else
+        {
+            int[] indecesToUpdate = indeces.Where(x => x >= newIndex & x < currentIndex).ToArray();
+            foreach (int i in indecesToUpdate)
+                indeces[indeces.IndexOf(i)]++;
         }
         indeces[workingNumberIndex] = newIndex;
-        Console.WriteLine(indeces.Select(x => numbers[x]).Delimited());
+        Console.WriteLine(indeces.Zip(numbers).OrderBy(x => x.First).Select(x => x.Second).Delimited());
 
         workingNumberIndex = 2;
         currentIndex = indeces[workingNumberIndex];
@@ -91,14 +107,56 @@ public static class Day20
             {
                 newIndex--;
                 if (newIndex < 0)
-                    newIndex = numbers.Count - 1;
+                    newIndex = numbers.Count - 2;
             }
-        for (int i = newIndex; i >= 0; i--)
+        if (newIndex > currentIndex)
         {
-            indeces[i] -= 1;
+            int[] indecesToUpdate = indeces.Where(x => x > currentIndex & x <= newIndex).ToArray();
+            foreach (int i in indecesToUpdate)
+                indeces[indeces.IndexOf(i)]--;
+        }
+        else
+        {
+            int[] indecesToUpdate = indeces.Where(x => x >= newIndex & x < currentIndex).ToArray();
+            foreach (int i in indecesToUpdate)
+                indeces[indeces.IndexOf(i)]++;
         }
         indeces[workingNumberIndex] = newIndex;
-        Console.WriteLine(indeces.Select(x => numbers[x]).Delimited());
+        Console.WriteLine(indeces.Zip(numbers).OrderBy(x => x.First).Select(x => x.Second).Delimited());
+
+        workingNumberIndex = 3;
+        currentIndex = indeces[workingNumberIndex];
+        newIndex = currentIndex;
+        val = numbers[workingNumberIndex];
+        if (val > 0)
+            for (int i = 0; i < val; i++)
+            {
+                newIndex++;
+                if (newIndex > (numbers.Count - 1))
+                    newIndex = 0;
+            }
+        else
+            for (int i = 0; i < Math.Abs(val); i++)
+            {
+                newIndex--;
+                if (newIndex < 0)
+                    newIndex = numbers.Count - 2;
+            }
+        if (newIndex > currentIndex)
+        {
+            int[] indecesToUpdate = indeces.Where(x => x > currentIndex & x <= newIndex).ToArray();
+            foreach (int i in indecesToUpdate)
+                indeces[indeces.IndexOf(i)]--;
+        }
+        else
+        {
+            int[] indecesToUpdate = indeces.Where(x => x >= newIndex & x < currentIndex).ToArray();
+            foreach (int i in indecesToUpdate)
+                indeces[indeces.IndexOf(i)]++;
+        }
+        indeces[workingNumberIndex] = newIndex;
+        Console.WriteLine(indeces.Zip(numbers).OrderBy(x => x.First).Select(x => x.Second).Delimited());
+
 
         return 0;
     }
